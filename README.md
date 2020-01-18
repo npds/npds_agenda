@@ -1,5 +1,7 @@
 # npds_agenda
-![Image of npds_agenda](/npds_agenda/npds_agenda.png) Modules agenda pour NPDS
+
+![Image of npds_agenda](/npds_agenda/npds_agenda.png)  
+Modules agenda pour NPDS
 
 ## Installation
 Télécharger l'archive dans le répertoire  
