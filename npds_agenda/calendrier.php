@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2018 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2023 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -115,12 +115,12 @@ function listsuj($sujet, $niv) {
       <div class="card-body">
          <h4 class="mb-3">'.ag_translate('Liste des événements').' '.ag_translate('pour').' '.$topictext.'</h4>';
    if ($sup == '0' && $inf == '0')
-      $affres .= '<div class="alert alert-danger"><i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Vide').'</div>';
+      $affres .= '<div class="alert alert-danger"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Vide').'</div>';
    else {
       $affres .= '
       <div class="list-group">
-         <a class="list-group-item list-group-item-action" href="'.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv=0">'.ag_translate('Evénement(s) à venir').' <span class="badge badge-success float-right" data-toggle="tooltip" data-placement="bottom" title="Visualiser">'.$sup.'</span></a>
-         <a class="list-group-item list-group-item-action" href="'.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv=1">'.ag_translate('Evénement(s) en cours ou passé(s)').' <span class="badge badge-secondary float-right" data-toggle="tooltip" data-placement="bottom" title="Visualiser">'.$inf.'</span></a>
+         <a class="list-group-item list-group-item-action" href="'.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv=0">'.ag_translate('Evénement(s) à venir').' <span class="badge bg-success float-end" data-toggle="tooltip" data-placement="bottom" title="Visualiser">'.$sup.'</span></a>
+         <a class="list-group-item list-group-item-action" href="'.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv=1">'.ag_translate('Evénement(s) en cours ou passé(s)').' <span class="badge bg-secondary float-end" data-toggle="tooltip" data-placement="bottom" title="Visualiser">'.$inf.'</span></a>
       </div>';
 
       //Requete liste evenement suivant $sujet
@@ -153,82 +153,78 @@ function listsuj($sujet, $niv) {
                   <h4 class="card-title">'.$titre.'</h4>
                   <p class="card-text">';
             if ($tot > 1) {
-               $affres .= '<i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure plusieurs jours').'</p>';
+               $affres .= '<i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure plusieurs jours').'</p>';
                while (list($ddate) = sql_fetch_row($result1)) {
-                  if($ddate > $now) $etat = 'badge badge-success';
-                  else if($ddate == $now) $etat = 'badge badge-warning';
-                  else if($ddate < $now) $etat = 'badge badge-warning';
+                  if($ddate > $now) $etat = 'badge bg-success';
+                  else if($ddate == $now) $etat = 'badge bg-warning';
+                  else if($ddate < $now) $etat = 'badge bg-warning';
                   $newdate = formatfrancais($ddate);
-                  $affres .= '<div class="'.$etat.' mr-2 mb-2">'.$newdate.'</div>';
+                  $affres .= '<div class="'.$etat.' me-2 mb-2">'.$newdate.'</div>';
                   $datepourmonmodal .= '<span class="'.$etat.'">'.$newdate.'</span>';
                }
             }
             else {
                list($ddate) = sql_fetch_row($result1);
                $newdate = formatfrancais($ddate);
-               if($ddate > $now) $etat = 'badge badge-success';
-               else if($ddate == $now){$etat = 'badge badge-warning';}
-               else if($ddate < $now){$etat = 'badge badge-warning';}
-               $affres .= '<i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure 1 jour').'</p>';
-               $affres .= '<div class="'.$etat.' mr-2 mb-2">'.$newdate.'</div>';
+               if($ddate > $now) $etat = 'badge bg-success';
+               else if($ddate == $now) $etat = 'badge bg-warning';
+               else if($ddate < $now) $etat = 'badge bg-warning';
+               $affres .= '
+               <i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure 1 jour').'</p>
+               <div class="'.$etat.' me-2 mb-2">'.$newdate.'</div>';
             }
             $affres .= '
-            <div class="row">
-               <div class="col-md-2">'.ag_translate('Résumé').'</div>
-               <div class="col-md-10">'.$intro.'</div>
-               <div class="col-md-2">'.ag_translate('Lieu').'</div>
-               <div class="col-md-10">'.$lieu.'</div>
-            </div>
-            <div class="row">
-               <div class="col-md-12">
-                  <button type="button" class="btn btn-secondary btn-sm my-2" data-toggle="modal" data-target="#ev'.$id.'">'.ag_translate('Voir la fiche').'</button>
-                  <div class="modal fade" id="ev'.$id.'" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-                     <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content">
-                           <div class="modal-header">
-                              <h4 class="modal-title" id="'.$id.'Label">'.$titre.'</h4>
-                              <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                           </div>
-                           <div class="modal-body">
-                              <h5 class="'.$etat.'"><strong>';
-            if ($tot > 1)
-               $affres .= $datepourmonmodal;
-            else
-               $affres .= $newdate;
+               <div class="row">
+                  <div class="col-md-2">'.ag_translate('Résumé').'</div>
+                  <div class="col-md-10">'.$intro.'</div>
+                  <div class="col-md-2">'.ag_translate('Lieu').'</div>
+                  <div class="col-md-10">'.$lieu.'</div>
+               </div>
+               <div class="row">
+                  <div class="col-md-12">
+                     <button type="button" class="btn btn-secondary btn-sm my-2" data-bs-toggle="modal" data-bs-target="#ev'.$id.'">'.ag_translate('Voir la fiche').'</button>
+                     <div class="modal fade" id="ev'.$id.'" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                           <div class="modal-content">
+                              <div class="modal-header">
+                                 <h4 class="modal-title" id="'.$id.'Label">'.$titre.'</h4>
+                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                 <h5 class="'.$etat.'"><strong>';
+            $affres .= $tot > 1 ? $datepourmonmodal : $newdate ;
             $affres .= '</strong></h5>
-                              <div class="row">
-                                 <div class="col-md-2">'.ag_translate('Résumé').'</div>
-                                 <div class="col-md-10">'.$intro.'</div>
+                                 <div class="row">
+                                    <div class="col-md-2">'.ag_translate('Résumé').'</div>
+                                    <div class="col-md-10">'.$intro.'</div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-2">'.ag_translate('Description').'</div>
+                                    <div class="col-md-10">'.$descript.'</div>
+                                 </div>
+                                 <div class="row">
+                                    <div class="col-md-2">'.ag_translate('Lieu').'</div>
+                                    <div class="col-md-10">'.$lieu.'</div>
+                                 </div>
                               </div>
-                              <div class="row">
-                                 <div class="col-md-2">'.ag_translate('Description').'</div>
-                                 <div class="col-md-10">'.$descript.'</div>
-                              </div>
-                              <div class="row">
-                                 <div class="col-md-2">'.ag_translate('Lieu').'</div>
-                                 <div class="col-md-10">'.$lieu.'</div>
-                              </div>
-                           </div>
-                           <div class="modal-footer">
-                              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                            </div>
                         </div>
                      </div>
                   </div>
                </div>
-            </div>
-            <hr class="my-4" />
-            <p class="card-text">';
-            if ($posteur == $cookie[1])
+               <hr class="my-4" />
+               <p class="card-text">';
+            $quipost = isset($cookie[1]) ? 'yes' : 'no';
+            if ($quipost == 'yes' and $cookie[1]==$posteur)
                $affres .= '
-               <a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
-               <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
+                  <a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
+                  <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
             else
                $affres .= ag_translate('Posté par').' '.$posteur;
             $affres .= '
-            </p>
-         </div>
-      </div>';
+               </p>
+            </div>
+         </div>';
          }
       }
       /*Affiche pagination*/
@@ -259,9 +255,6 @@ function jour($date) {
    $date = removeHack($date);
    //Fin securite
    require_once('modules/'.$ModPath.'/pag_fonc.php');
-   //debut theme html partie 1/2
-   $inclusion = false;
-   $inclusion = "modules/".$ModPath."/html/jour.html";
    //Gestion naviguation en cours ou passe
    $now = date('Y-m-d');
 
@@ -299,7 +292,7 @@ function jour($date) {
    $bandeau = '<a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath=npds_agenda&ModStart=calendrier&amp;month='.$retour[0].'&amp;an='.$retour[1].'">'.ag_translate('Retour au calendrier').'</a>';
    $lejour = $datetime;
    if ($nb_entrees == 0)
-      $affeven = '<p><i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Rien de prévu ce jour').'</p>';
+      $affeven = '<p><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Rien de prévu ce jour').'</p>';
    else {
    //Requete liste evenement suivant $date
       $result = sql_query("SELECT
@@ -330,34 +323,35 @@ function jour($date) {
             /*Si evenement plusieurs jours*/
             $result1 = sql_query("SELECT date FROM ".$NPDS_Prefix."agend WHERE liaison = '$liaison' ORDER BY date DESC");
             $tot = sql_num_rows($result1);
-            $affeven .= '<img class="img-thumbnail col-2" src="'.$tipath.''.$topicimage.'" />';
-            $affeven .= '<h4 class="card-title">'.$titre.'</h4>';
-
-            if ($posteur == $cookie[1])
-               $affeven .= '<a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
-               <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
-            else
-               $affeven .= '<p>'.ag_translate('Posté par').'&nbsp;'.$posteur.'</p>';
+            $affeven .= '
+                  <img class="img-thumbnail col-2" src="'.$tipath.''.$topicimage.'" />
+                  <h4 class="card-title">'.$titre.'</h4>';
+            $quipost = isset($cookie[1]) ? 'yes' : 'no';
+            $affeven .= ($quipost == 'yes' and $cookie[1]==$posteur) ?
+                     '<a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
+                     <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a>' :
+                     '<p>'.ag_translate('Posté par').'&nbsp;'.$posteur.'</p>' ;
+          
             $affeven .= '<p class="card-text">';
             if ($tot > 1) {
-               $affeven .= '<i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure plusieurs jours').'</p>';
+               $affeven .= '<i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure plusieurs jours').'</p>';
                while (list($ddate) = sql_fetch_row($result1)) {
-                  if($ddate > $now){$etat = 'badge badge-success';}
-                  else if($ddate == $now){$etat = 'badge badge-warning';}
-                  else if($ddate < $now){$etat = 'badge badge-warning';}
+                  if($ddate > $now) $etat = 'badge bg-success';
+                  else if($ddate == $now) $etat = 'badge bg-warning';
+                  else if($ddate < $now) $etat = 'badge bg-warning';
                   $newdate = formatfrancais($ddate);
-                  $affeven .= '<div class="'.$etat.' mr-2 mb-2">'.$newdate.'</div>';
+                  $affeven .= '<div class="'.$etat.' me-2 mb-2">'.$newdate.'</div>';
                   $datepourmonmodal .= '<span class="'.$etat.'">'.$newdate.'</span>';
                }
             }
             else {
                list($ddate) = sql_fetch_row($result1);
                $newdate = formatfrancais($ddate);
-               if($ddate > $now){$etat = 'badge badge-success';}
-               else if($ddate == $now){$etat = 'badge badge-warning';}
-               else if($ddate < $now){$etat = 'badge badge-warning';}
-               $affeven .= '<i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure 1 jour').'</p>';
-               $affeven .= '<div class="'.$etat.' mr-2 mb-2">'.$newdate.'</div>';
+               if($ddate > $now) $etat = 'badge bg-success';
+               else if($ddate == $now) $etat = 'badge bg-warning';
+               else if($ddate < $now) $etat = 'badge bg-warning';
+               $affeven .= '<i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure 1 jour').'</p>
+               <div class="'.$etat.' me-2 mb-2">'.$newdate.'</div>';
             }
             $affeven .= '
             <div class="row">
@@ -365,55 +359,45 @@ function jour($date) {
                <div class="col-md-10">'.$intro.'</div>
                <div class="col-md-2">'.ag_translate('Lieu').'</div>
                <div class="col-md-10">'.$lieu.'</div>
-            </div>';
-//événement du calendrier 
-            $affeven .= '
-            <div class="row">
-            <div class="col-md-12">
-            <button type="button" class="btn btn-secondary btn-sm my-2" data-toggle="modal" data-target="#ev'.$id.'">
-            '.ag_translate('Voir la fiche').'
-            </button>
-            <div class="modal fade" id="ev'.$id.'" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
-            <div class="modal-dialog modal-lg"" role="document">
-            <div class="modal-content">
-            <div class="modal-header">
-            <h4 class="modal-title" id="'.$id.'Label">'.$titre.'</h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-            </button>
             </div>
-            <div class="modal-body">
-               <h5 class="'.$etat.'"><strong>';
-            if ($tot > 1)
-               $affeven .= $datepourmonmodal;
-            else
-               $affeven .= $newdate;
-           $affeven .= '</strong></h5>
-               <div class="row">
-                  <div class="col-md-2">'.ag_translate('Résumé').'</div>
-                  <div class="col-md-10">'.$intro.'</div>
-                  <div class="col-md-2">'.ag_translate('Description').'</div>
-                  <div class="col-md-10">'.$descript.'</div>
-                  <div class="col-md-2">'.ag_translate('Lieu').'</div>
-                  <div class="col-md-10">'.$lieu.'</div>
+            <div class="row">
+               <div class="col-md-12">
+                  <button type="button" class="btn btn-secondary btn-sm my-2" data-bs-toggle="modal" data-bs-target="#ev'.$id.'">
+                  '.ag_translate('Voir la fiche').'
+                  </button>
+                  <div class="modal fade" id="ev'.$id.'" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
+                     <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content">
+                           <div class="modal-header">
+                              <h4 class="modal-title" id="Label'.$id.'">'.$titre.'</h4>
+                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                           </div>
+                           <div class="modal-body">
+                              <h5 class="'.$etat.'"><strong>';
+            $affeven .= $tot > 1? $datepourmonmodal : $newdate;
+            $affeven .= '</strong></h5>
+                              <div class="row">
+                                 <div class="col-md-2">'.ag_translate('Résumé').'</div>
+                                 <div class="col-md-10">'.$intro.'</div>
+                                 <div class="col-md-2">'.ag_translate('Description').'</div>
+                                 <div class="col-md-10">'.$descript.'</div>
+                                 <div class="col-md-2">'.ag_translate('Lieu').'</div>
+                                 <div class="col-md-10">'.$lieu.'</div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
                </div>
             </div>
-            <div class="modal-footer">
-               <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-            </div>
          </div>
-      </div>
-   </div>
-</div>
-</div>';
-      $affeven .= '</div></div>';
+      </div>';
+         }
+      }
    }
-   }
-   }
-   
 /*debut theme html partie 2/2*/
    ob_start();
-   include ($inclusion);
+   include ("modules/".$ModPath."/html/jour.html");
    $Xcontent = ob_get_contents();
    ob_end_clean();
    $npds_METALANG_words = array(
@@ -423,10 +407,8 @@ function jour($date) {
    );
    echo meta_lang(aff_langue(preg_replace(array_keys($npds_METALANG_words),array_values($npds_METALANG_words), $Xcontent)));
 /*fin theme html partie 2/2*/
-
 /*Affiche pagination*/
    echo ag_pag($total_pages,$page_courante,'2',''.$ThisFile.'&amp;subop=jour&amp;date='.$date.'','_mod');
-   
 }
 /// FIN JOUR ///
 
@@ -456,7 +438,7 @@ function fiche($date, $id) {
    $result = sql_query("SELECT titre, intro, descript, lieu, topicid, posteur, groupvoir FROM ".$NPDS_Prefix."agend_dem WHERE id = '$id' AND valid = '1'");
    $total = sql_num_rows($result);
    if ($total == 0)
-      $vide = '<p class="lead"><i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Aucun événement trouvé').'</p>';
+      $vide = '<p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Aucun événement trouvé').'</p>';
    else {
       list($titre, $intro, $descript, $lieu, $topicid, $posteur, $groupvoir) = sql_fetch_row($result);
 
@@ -473,7 +455,7 @@ function fiche($date, $id) {
             $postepar = ''.ag_translate('Posté par').'&nbsp;'.$posteur.'</td>';
          $affres .= '</tr><tr><td>';
          if ($tot > 1) {
-            $imgfle .= '<i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure sur plusieurs jours').'&nbsp;:&nbsp;
+            $imgfle .= '<i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure sur plusieurs jours').'&nbsp;:&nbsp;
             <select>
                <option>'.ag_translate('Voir').'</option>';
             while (list($ddate) = sql_fetch_row($result1)) {

@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2019 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2022 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -39,32 +39,32 @@ $icon='npds_agenda';
 $list_fich = array(array('',''), array('',''));
 
 #autodoc $sql = array(""): Si votre module doit exécuter une ou plusieurs requêtes SQL, tapez vos requêtes ici.
-#autodoc Attention! UNE requête par élément de tableau!
+#autodoc Attention! UNE requête par élément de tableau! SVP respecter la syntaxe suivante PAS d'espace avant l'instruction
 #autodoc Synopsis: $sql = array("requête_sql_1","requête_sql_2");
 $sql = array("CREATE TABLE ".$NPDS_Prefix."agend (
   id int(11) NOT NULL AUTO_INCREMENT,
   date date DEFAULT NULL,
   liaison int(11) NOT NULL,
   KEY id (id)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;",
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
 "CREATE TABLE ".$NPDS_Prefix."agendsujet (
   topicid int(3) NOT NULL AUTO_INCREMENT,
-  topicimage varchar(20) DEFAULT NULL,
-  topictext mediumtext,
+  topicimage varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  topictext mediumtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY  (topicid)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;",
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
 "CREATE TABLE ".$NPDS_Prefix."agend_dem (
   id int(11) NOT NULL AUTO_INCREMENT,
-  titre mediumtext NOT NULL,
-  intro longtext NOT NULL,
-  descript longtext NOT NULL,
-  lieu varchar(100) NOT NULL,
+  titre mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  intro longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  descript longtext COLLATE utf8mb4_unicode_ci NOT NULL,
+  lieu varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   topicid int(11) NOT NULL,
-  posteur varchar(100) NOT NULL,
+  posteur varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
   groupvoir int(3) NOT NULL,
   valid int(1) NOT NULL,
-  PRIMARY KEY  (id)
-) ENGINE=MyISAM  DEFAULT CHARSET=utf8;");
+  PRIMARY KEY (id)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;");
 
 
 #autodoc $blocs = array(array(""), array(""), array(""), array(""), array(""), array(""), array(""), array(""), array(""))

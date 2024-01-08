@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2017 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2023 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -127,7 +127,6 @@ function ferie($mois, $an) {
 // Réponse
    $reponse = array();
    foreach($ferie as $nom => $date) {
-//   while(list($nom, $date) = each($ferie)) {
       if (isset($date[$mois])) {
       // Une fête à date calculable
          $reponse[$date[$mois]]=$nom;
@@ -215,7 +214,16 @@ function calend($an, $month, $calblock) {
       }
    }
 
-   $nbjour = cal_days_in_month( CAL_GREGORIAN, $month, $an); // nombre de jour dans le mois
+if(function_exists("cal_days_in_month"))
+   $nbjour = cal_days_in_month(CAL_GREGORIAN, $month, $an); // nombre de jour dans le mois
+else {
+   function days_in_month($month, $year) {
+      return $month == 2 ? ($year % 4 ? 28 : ($year % 100 ? 29 : ($year % 400 ? 28 : 29))) : (($month - 1) % 7 % 2 ? 30 : 31);
+   }
+   $nbjour =  days_in_month($month, $an);
+}
+
+
    $m_prec=($month-1); $m_suiv=($month+1);
    $a_prec=$an; $a_suiv=$an;
    if($month==1) {$m_prec=12;$a_prec=$an-1;};
@@ -245,16 +253,16 @@ function calend($an, $month, $calblock) {
       $date = ajout_zero($i, $month, $an);
       settype($jour_actuel,'integer');
       $cs='';
-      if ($i == $jour_actuel and $month == $mois_actuel and $an == $an_actuel) $cs = 'text-danger font-weight-bold';
+      if ($i == $jour_actuel and $month == $mois_actuel and $an == $an_actuel) $cs = 'text-danger fw-bold';
       if ($tab_jours[$i] == 1 and $tab_jours_ferie[$i] == 1){
          $cla='table-warning'; 
-         $lk='<a href="modules.php?ModPath=npds_agenda&amp;ModStart=calendrier&amp;subop=jour&amp;date='.$date.'"><span data-toggle="tooltip" data-placement="bottom" data-html="true" title="'.$fetetitre[$i].$afftitre[$i].'" style="padding:1px;" class="small d-block table-info '.$cs.'" >'.$i.'</span></a>';
+         $lk='<a href="modules.php?ModPath=npds_agenda&amp;ModStart=calendrier&amp;subop=jour&amp;date='.$date.'"><span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="'.$fetetitre[$i].$afftitre[$i].'" style="padding:1px;" class="small d-block table-info '.$cs.'" >'.$i.'</span></a>';
       } else if($tab_jours[$i] == 1) {
          $cla='table-info';
-         $lk='<a href="modules.php?ModPath=npds_agenda&amp;ModStart=calendrier&amp;subop=jour&amp;date='.$date.'"><span data-toggle="tooltip" data-placement="bottom" data-html="true" title="'.$afftitre[$i].'" style="padding:1px;" class="small d-block '.$cs.'">'.$i.'</span></a>';
+         $lk='<a href="modules.php?ModPath=npds_agenda&amp;ModStart=calendrier&amp;subop=jour&amp;date='.$date.'"><span data-bs-toggle="tooltip" data-placement="bottom" data-bs-html="true" title="'.$afftitre[$i].'" style="padding:1px;" class="small d-block '.$cs.'">'.$i.'</span></a>';
       } else if($tab_jours_ferie[$i] == 1) {
          $cla='table-warning';
-         $lk='<span data-toggle="tooltip" data-placement="bottom" data-html="true" title="'.$fetetitre[$i].'" style="padding:1px;"class="small d-block '.$cs.'">'.$i.'</span>';
+         $lk='<span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="'.$fetetitre[$i].'" style="padding:1px;"class="small d-block '.$cs.'">'.$i.'</span>';
       }  
       else {
          $cla='';
@@ -358,7 +366,7 @@ function cal($an, $month, $debut, $morurl) {
       $date = ajout_zero($i, $month, $an);
       settype($jour_actuel,'integer');
       $cs='';
-      if ($i == $jour_actuel and $month == $mois_actuel and $an == $an_actuel) $cs = 'text-danger font-weight-bold';
+      if ($i == $jour_actuel and $month == $mois_actuel and $an == $an_actuel) $cs = 'text-danger fw-bold';
 
       if ($debut == '')
          $newlien = $date;
@@ -370,7 +378,7 @@ function cal($an, $month, $debut, $morurl) {
             $lk = '<a class="btn btn-outline-primary btn-sm w-100" href="'.$ThisFile.$morurl.'&amp;month='.$month.'&amp;an='.$an.'&amp;debut='.$newlien.'">'.$i.'</a>';
             $cla='table-primary';
          } else {
-            $lk= '<span class="d-block w-100 border rounded '.$cs.'" data-toggle="tooltip" data-placement="bottom" title="Réservée">'.$i.'</span>';
+            $lk= '<span class="d-block w-100 border rounded '.$cs.'" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Réservée">'.$i.'</span>';
             $cla='table-light';
          }
 
@@ -431,37 +439,35 @@ function suj() {
    if(autorisation($gro)) {
    $ajeven = '
       <li class="nav-item">
-      <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration">'.ag_translate('Vos ajouts').'</a>
+         <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration">'.ag_translate('Vos ajouts').'</a>
       </li>
       <li class="nav-item">
-      <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=agenda_add"><i class="fa fa-plus" aria-hidden="true"></i> '.ag_translate('Evénement').'</a>
+         <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=agenda_add"><i class="fa fa-plus" aria-hidden="true"></i> '.ag_translate('Evénement').'</a>
       </li>';
    }
 
-   //Accès direct à un sujet
-   $accesuj = '<li class="nav-item ml-3">
-   <select class="custom-select" onchange="window.location=(\''.$ThisRedo.'&subop=listsuj&sujet='.$stopicid.'\'+this.options[this.selectedIndex].value)">
-   <option>'.ag_translate('Accès catégorie(s)').'</option>';
+   $accesuj = '
+   <li class="nav-item ms-3">
+      <select class="form-select" onchange="window.location=(\''.$ThisRedo.'&subop=listsuj&sujet='.$stopicid.'\'+this.options[this.selectedIndex].value)">
+         <option>'.ag_translate('Accès catégorie(s)').'</option>';
 
    //Requete liste sujet
    $result = sql_query("SELECT topicid, topictext FROM ".$NPDS_Prefix."agendsujet ORDER BY topictext ASC");
    while(list($stopicid, $topictext) = sql_fetch_row($result)) {
       $topictext = stripslashes(aff_langue($topictext));
-      $accesuj .= '<option value="'.$stopicid.'">'.$topictext.'</option>';
+      $accesuj .= '
+         <option value="'.$stopicid.'">'.$topictext.'</option>';
    }
-   if($bouton == '1')
-      $rech = ag_translate('Par ville');
-   else
-      $rech = ag_translate('Par').' '.$bouton;
-   $accesuj .= '</select></li>';
-   
-// fin Accès direct à un sujet
+   $rech = $bouton == '1' ? ag_translate('Par ville') : ag_translate('Par').' '.$bouton;
+   $accesuj .= '
+      </select>
+   </li>';
 
    $vuannu ='<li class="nav-item">
-            <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee">'.ag_translate('Vue annuelle').'</a>
+               <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.date("Y").'">'.ag_translate('Vue annuelle').'</a>
             </li>';
    $vulieu ='<li class="nav-item">
-            <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=lieu">'.$rech.'</a>
+               <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=lieu">'.$rech.'</a>
             </li>';
 
    //debut theme html partie 2/2

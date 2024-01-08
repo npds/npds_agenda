@@ -2,7 +2,7 @@
 ##
 ## DUNE by NPDS
 ##
-## NPDS Copyright (c) 2002-2017 by Philippe Brunier
+## NPDS Copyright (c) 2002-2022 by Philippe Brunier
 ##
 ## This program is free software. You can redistribute it and/or modify
 ## it under the terms of the GNU General Public License as published by
@@ -26,7 +26,8 @@
 ## 3. Mettez un CHMOD 666 sur les fichiers .html
 ##
 ## ADMINISTRATION DU MODULE
-## Via Admin-Plugins de NPDS. 
+## Via administration de NPDS.
+## /admin.php?op=Extend-Admin-SubModule&ModPath=npds_agenda&ModStart=admin/adm 
 ##
 ## UTILISATION DU MODULE
 ## Appel grace à une URL du type : 
