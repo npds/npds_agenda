@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2017 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2023 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -42,7 +42,7 @@ function listsuj($an) {
       <a class="btn btn-outline-secondary border-0" href="modules.php?ModPath='.$ModPath.'&ModStart=calendrier&month=01&an='.$an.'"><span class="label label-default">'.ag_translate('Année').' '.$an.'</span></a>
       <a class="btn btn-outline-secondary border-0" href="'.$ThisFile.'&amp;an='.$suiv.'"><i class="fa fa-chevron-right align-middle" aria-hidden="true"></i></a>
    </h4>
-   <div class="form-row mb-3">';
+   <div class="row mb-3">';
    for ($month = 1; $month < 13; $month++) {
       echo '
       <div class="col-sm-6 col-md-6 col-lg-4">
