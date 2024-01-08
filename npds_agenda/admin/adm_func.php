@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2022 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2023 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -17,15 +17,15 @@
 // DEBUT MENU PRINCIPAL
 function menuprincipal() {
    global $NPDS_Prefix, $ModPath, $ThisFile;
-   $version = 'V.2.0';
+   $version = 'V.3.0';
    echo '
-   <h2><img class="me-2" src="modules/npds_agenda/npds_agenda.png"  alt="icon_npds_agenda"> '.ag_translate('Agenda').'<small class="float-right small">'.$version.'</small></h2>
+   <h2><img class="me-2" src="modules/npds_agenda/npds_agenda.png" alt="icon_npds_agenda"> '.ag_translate('Agenda').'<small class="float-end small">'.$version.'</small></h2>
    <div class="card mb-3">
       <div class="card-body">
          <div class="me-2"><a class="btn btn-outline-primary btn-sm" href='.$ThisFile.'>'.ag_translate('Accueil').'</a>
             <a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicsmanager">'.ag_translate('Catégories').'</a>
             <a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=configuration">'.ag_translate('Configuration').'</a>
-            <a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee">'.ag_translate('Calendrier').'</a>
+            <a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.date('Y').'">'.ag_translate('Calendrier').'</a>
          </div>';
 
    //Requete compte nbre d'événements suivant état
@@ -381,7 +381,7 @@ function editevt($id, $month, $an, $debut) {
    settype($offligne,'string');
    echo '
    <h4>'.ag_translate('Editer').' : '.$titre.'</h4>
-   '.ag_translate('Posté par').' '.$posteur.' '.userpopover($posteur,40).'
+   '.ag_translate('Posté par').' '.$posteur.' '.userpopover($posteur,40,'').'
    <form name="adminForm" action="'.$ThisFile.'" method="post">
       <div class="my-3 form-floating">
          ';
