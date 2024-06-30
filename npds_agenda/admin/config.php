@@ -20,7 +20,7 @@ $courriel = "1";
 $revalid = "3";
 $receveur = "";
 $nb_admin = "5";
-$nb_news = "10";
-$bouton = "départements";
+$nb_news = "3";
+$bouton = "1";
 
 ?>

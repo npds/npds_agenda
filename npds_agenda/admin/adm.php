@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2017 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2022 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -52,7 +52,8 @@ if ($admin) {
    /*css perso admin en attendant evolution page.php*/
 
    GraphicAdmin($hlpfile);
-   echo '<div id="adm_men">';
+   echo '
+   <div class="p-3 border rounded">';
    settype($subop,'string');
    settype($month,'integer');
    settype($an,'integer');
@@ -101,6 +102,7 @@ if ($admin) {
    break;
    }
    }
-   echo '</div>';
+   echo '
+   </div>';
    include ("footer.php");
 ?>
