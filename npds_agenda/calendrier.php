@@ -538,6 +538,8 @@ function fiche($date, $id) {
       switch($subop) {
          default:
             echo suj();
+            $an = date("Y", time());
+            $month = date("m", time());
             echo calend($an, $month, 0);
          break;
          case 'listsuj':

@@ -158,13 +158,16 @@ function mois($nb) {
 // construction calendrier visualisation
 function calend($an, $month, $calblock) {
    global $ModPath, $NPDS_Prefix, $ThisFile;
-   $p_m='month';$p_a='an';
+   $p_m='month'; $p_a='an';
    if ($calblock==1) { 
       $ThisFile=$_SERVER['REQUEST_URI'];
-       $p_m='b_mois';
-       $p_a='b_an';
-      //var_dump($debug);
-      }
+      $ThisFile = !strstr($ThisFile,'?') ? $ThisFile.'?' : $ThisFile ;
+      $ThisFile = preg_replace('#(&b_.*)$#', '', $ThisFile);
+      $p_m='b_mois';
+      $p_a='b_an';
+   }
+      $ThisFile = preg_replace('#(&month.*)$#', '', $ThisFile);
+
    $output='';
    $jour_actuel = date("j", time());
    $mois_actuel = date("m", time());
@@ -214,14 +217,14 @@ function calend($an, $month, $calblock) {
       }
    }
 
-if(function_exists("cal_days_in_month"))
-   $nbjour = cal_days_in_month(CAL_GREGORIAN, $month, $an); // nombre de jour dans le mois
-else {
-   function days_in_month($month, $year) {
-      return $month == 2 ? ($year % 4 ? 28 : ($year % 100 ? 29 : ($year % 400 ? 28 : 29))) : (($month - 1) % 7 % 2 ? 30 : 31);
+   if(function_exists("cal_days_in_month"))
+      $nbjour = cal_days_in_month(CAL_GREGORIAN, $month, $an); // nombre de jour dans le mois
+   else {
+      function days_in_month($month, $year) {
+         return $month == 2 ? ($year % 4 ? 28 : ($year % 100 ? 29 : ($year % 400 ? 28 : 29))) : (($month - 1) % 7 % 2 ? 30 : 31);
+      }
+      $nbjour =  days_in_month($month, $an);
    }
-   $nbjour =  days_in_month($month, $an);
-}
 
 
    $m_prec=($month-1); $m_suiv=($month+1);

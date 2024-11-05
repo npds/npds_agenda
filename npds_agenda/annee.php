@@ -38,9 +38,9 @@ function listsuj($an) {
       $inclusion = "modules/".$ModPath."/html/annee.html";
    echo '
    <h4 class="text-center mb-3">
-      <a class="btn btn-outline-secondary border-0" href="'.$ThisFile.'&amp;an='.$prec.'"><i class="fa fa-chevron-left align-middle" aria-hidden="true"></i></a>
-      <a class="btn btn-outline-secondary border-0" href="modules.php?ModPath='.$ModPath.'&ModStart=calendrier&month=01&an='.$an.'"><span class="label label-default">'.ag_translate('Année').' '.$an.'</span></a>
-      <a class="btn btn-outline-secondary border-0" href="'.$ThisFile.'&amp;an='.$suiv.'"><i class="fa fa-chevron-right align-middle" aria-hidden="true"></i></a>
+      <a class="btn btn-outline-secondary border-0" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.$prec.'"><i class="fa fa-chevron-left align-middle" aria-hidden="true"></i></a>
+      <a class="btn btn-outline-secondary border-0" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier&month=01&an='.$an.'"><span class="label label-default">'.ag_translate('Année').' '.$an.'</span></a>
+      <a class="btn btn-outline-secondary border-0" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.$suiv.'"><i class="fa fa-chevron-right align-middle" aria-hidden="true"></i></a>
    </h4>
    <div class="row mb-3">';
    for ($month = 1; $month < 13; $month++) {
@@ -94,7 +94,7 @@ global $pdst, $language;
             listsuj($an);
          break;
          case 'calend':
-            echo calend($an, $month);
+            echo calend($an, $month,0);
          break;
          case 'petit':
             petit($date, $id);
