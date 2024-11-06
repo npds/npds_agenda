@@ -2,13 +2,13 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2023 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
+/* the Free Software Foundation; either version 3 of the License.       */
 /*                                                                      */
-/* Module npds_agenda 2.0                                               */
+/* Module npds_agenda 3.0                                               */
 /*                                                                      */
 /* Auteur Oim                                                           */
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */
@@ -166,39 +166,42 @@ function topicsmanager(){
       settype ($count,'integer');
       echo '
       <h4>'.ag_translate('Sélectionnez une catégorie, cliquez pour modifier').'</h4>
-      <div class="row">';
+      <div class="row mb-3">';
       while(list($topicid, $topicimage, $topictext) = sql_fetch_row($result)) {
          $topictext = stripslashes($topictext);
-         if (($topicimage) or ($topicimage != '')) {
+         if (($topicimage) or ($topicimage != ''))
             echo '
-         <div class="col-md-3">
-            <div class="card-body"><p class="card-text">'.aff_langue(''.$topictext.'').'</p><a href="'.$ThisFile.'&amp;subop=topicedit&amp;topicid='.$topicid.'"><img class="card-img-top img-thumbnail" src="'.$tipath.''.$topicimage.'" data-toggle="tooltip" data-placement="bottom" title="'.ag_translate('Cliquez pour éditer').'" /></a></div></div>';
-         }
+         <div class="col-md-3 col-sm-2">
+            <div class="card-body">
+               <p class="card-text">'.aff_langue($topictext).'</p><a href="'.$ThisFile.'&amp;subop=topicedit&amp;topicid='.$topicid.'"><img class="card-img-top img-thumbnail" src="'.$tipath.''.$topicimage.'" data-bs-toggle="tooltip" data-bs-placement="bottom" title="'.ag_translate('Cliquez pour éditer').'" /></a>
+            </div>
+         </div>';
          else
-            echo '<div class="col-2"><a class="" href="'.$ThisFile.'&amp;subop=topicedit&amp;topicid='.$topicid.'">'.aff_langue(''.$topictext.'').'</a></div>';
+            echo '
+         <div class="col-2"><a class="" href="'.$ThisFile.'&amp;subop=topicedit&amp;topicid='.$topicid.'">'.aff_langue(''.$topictext.'').'</a></div>';
          $count++;
          if ($count == 4) {
             echo '</div><div class="row">';
             $count = 0;
          }
       }
-   echo '</div>';
+   echo '
+      </div>';
    }
    echo '
-   <h4>'.ag_translate('Ajouter une catégorie').'</h4>
-   <form action="'.$ThisFile.'" method="post" name="adminForm">
-      <div class="mb-3">
-         <label for="">'.ag_translate('Titre de la catégorie').'</label>
-         <input class="form-control" type="text" name="topictext" size="40">
-      </div>
-      <div class="mb-3">
-         <label class="me-2" for="">'.ag_translate('Image de la catégorie').'</label>';
+      <h4>'.ag_translate('Ajouter une catégorie').'</h4>
+      <form action="'.$ThisFile.'" method="post" name="adminForm">
+         <div class="mb-3">
+            <label for="">'.ag_translate('Titre de la catégorie').'</label>
+            <input class="form-control" type="text" name="topictext" />
+         </div>
+         <div class="mb-3">';
    imgcate($topicimage);
-   echo '<small id="" class="form-text text-muted">'.ag_translate('Chemin des images').' : '.$tipath.'</small>
-      </div>
-      <input type="hidden" name="subop" value="topicmake" />
-      <button type="submit" class="btn btn-outline-primary btn-sm">'.ag_translate('Ajouter une catégorie').'</button>
-   </form>
+   echo '<small class="form-text text-body-secondary">'.ag_translate('Chemin des images').' : '.$tipath.'</small>
+         </div>
+         <input type="hidden" name="subop" value="topicmake" />
+         <button type="submit" class="btn btn-primary btn-sm">'.ag_translate('Ajouter une catégorie').'</button>
+      </form>
    </div>';
 }
 
@@ -227,16 +230,19 @@ function imgcate($topicimage) {
    }
    settype($val,'string');
    if ($topicimage != '') $val = 'value="'.$topicimage.'"';
-   echo '<select class="custom-select" name="topicimage" '.$val.'>';
+   echo '
+   <select class="form-select" id="topicimage" aria-label="Large select example" name="topicimage" '.$val.'>
+      <option>'.ag_translate('Image de la catégorie').'</option>';
    $nb = count($ListFiles);
-   for($i = 0;$i < $nb;$i++)
-   {
-   echo '<option value=\''.$ListFiles[$i].'\'';
-   if($ListFiles[$i] == $topicimage)
-   echo ' selected=\'selected\'';
-   echo '>'.$ListFiles[$i].'</option>';
+   for($i = 0;$i < $nb;$i++) {
+      echo '
+      <option value=\''.$ListFiles[$i].'\'';
+      if($ListFiles[$i] == $topicimage)
+         echo ' selected="selected"';
+      echo '>'.$ListFiles[$i].'</option>';
    }
-   echo '</select>';
+   echo '
+   </select>';
 }
 function topicmake($topicimage, $topictext) {
    global $NPDS_Prefix, $ThisFile;
@@ -246,14 +252,13 @@ function topicmake($topicimage, $topictext) {
    /*Fin securite*/
    menuprincipal();
    if ($topictext == '')
-   {
-   echo '<p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Pas de catégorie ajoutée').'</span></p>
+      echo '
+   <p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Pas de catégorie ajoutée').'</span></p>
    <div><a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicsmanager">'.ag_translate('Retour').'</a></div>';
-   }
-   else
-   {
-   sql_query("INSERT INTO ".$NPDS_Prefix."agendsujet VALUES (NULL, '$topicimage', '$topictext')");
-   echo '<p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('La catégorie est créée').'</span></p>
+   else {
+      sql_query("INSERT INTO ".$NPDS_Prefix."agendsujet VALUES (NULL, '$topicimage', '$topictext')");
+      echo '
+   <p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('La catégorie est créée').'</span></p>
    <div><a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicsmanager">'.ag_translate('Retour édition catégorie').'</a></div>';
    }
 }
@@ -935,7 +940,7 @@ function ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admi
    $content .= "/* it under the terms of the GNU General Public License as published by */\n";
    $content .= "/* the Free Software Foundation; either version 2 of the License.       */\n";
    $content .= "/*                                                                      */\n";
-   $content .= "/* Module npds_agenda 2.0                                               */\n";
+   $content .= "/* Module npds_agenda 3.0                                               */\n";
    $content .= "/*                                                                      */\n";
    $content .= "/* Auteur Oim                                                           */\n";
    $content .= "/* Changement de nom du module version Rev16 par jpb/phr janv 2017      */\n";
@@ -965,7 +970,7 @@ function ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admi
       $content .= "/* it under the terms of the GNU General Public License as published by */\n";
       $content .= "/* the Free Software Foundation; either version 2 of the License.       */\n";
       $content .= "/*                                                                      */\n";
-      $content .= "/* Module npds_agenda 2.0                                               */\n";
+      $content .= "/* Module npds_agenda 3.0                                               */\n";
       $content .= "/*                                                                      */\n";
       $content .= "/* Auteur Oim                                                           */\n";
       $content .= "/* Changement de nom du module version Rev16 par jpb/phr janv 2017      */\n";

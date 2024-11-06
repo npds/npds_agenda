@@ -2,13 +2,13 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2022 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
+/* the Free Software Foundation; either version 3 of the License.       */
 /*                                                                      */
-/* Module npds_agenda 2.0                                               */
+/* Module npds_agenda 3.0                                               */
 /*                                                                      */
 /* Auteur Oim                                                           */
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */
@@ -40,12 +40,11 @@ else {
 $content .= calend($Ban_actuel,$Bmois_actuel,1);
 
 // Si membre appartient au bon groupe
-if(autorisation($gro)) {
+if(autorisation($gro))
    $content .= '
       <p>
          <a class="btn btn-block btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=agenda_add"><i class="fa fa-plus" aria-hidden="true"></i> '.ag_translate('Proposer événement').'</a>
       </p>';
-   }
 $content .= '
    <table class="table table-borderless table-sm">
       <tr>
@@ -60,6 +59,6 @@ $content .= '
 if(autorisation(-127))
    $content .= '
    <div class="mt-2 text-end">
-      <a href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=npds_agenda&amp;ModStart=admin/adm" title="Admin" data-bs-toggle="tooltip"><i id="cogs" class="fa fa-cogs fa-lg"></i></a>
+      <a href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=npds_agenda&amp;ModStart=admin/adm" title="Admin" data-bs-toggle="tooltip" data-bs-placement="left"><i id="cogs" class="fa fa-cogs fa-lg"></i></a>
    </div> ';
 ?>

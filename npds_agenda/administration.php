@@ -2,13 +2,13 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2023 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
+/* the Free Software Foundation; either version 3 of the License.       */
 /*                                                                      */
-/* Module npds_agenda 2.0                                               */
+/* Module npds_agenda 3.0                                               */
 /*                                                                      */
 /* Auteur Oim                                                           */
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */
@@ -84,7 +84,7 @@ function vosajouts() {
                <td class="text-center align-middle small">';
       $res1 = sql_query("SELECT id, date FROM ".$NPDS_Prefix."agend WHERE liaison = '$id' ORDER BY date DESC");
       while(list($sid, $date) = sql_fetch_row($res1)) {
-         echo $date.'<br />';
+         echo formatTimes($date,IntlDateFormatter::SHORT,IntlDateFormatter::NONE).'<br />';
       }
       echo '</td>';
       if ($valid == 1)

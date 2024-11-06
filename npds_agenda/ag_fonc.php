@@ -2,13 +2,13 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2023 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
-/* the Free Software Foundation; either version 2 of the License.       */
+/* the Free Software Foundation; either version 3 of the License.       */
 /*                                                                      */
-/* Module npds_agenda 2.0                                               */
+/* Module npds_agenda 3.0                                               */
 /*                                                                      */
 /* Auteur Oim                                                           */
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */
@@ -440,7 +440,7 @@ function suj() {
    //fin theme html partie 1/2
    //Si membre appartient au bon groupe
    if(autorisation($gro)) {
-   $ajeven = '
+      $ajeven = '
       <li class="nav-item">
          <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration">'.ag_translate('Vos ajouts').'</a>
       </li>
@@ -450,7 +450,6 @@ function suj() {
    }
 
    $accesuj = '
-   <li class="nav-item ms-3">
       <select class="form-select" onchange="window.location=(\''.$ThisRedo.'&subop=listsuj&sujet='.$stopicid.'\'+this.options[this.selectedIndex].value)">
          <option>'.ag_translate('Accès catégorie(s)').'</option>';
 
@@ -463,8 +462,7 @@ function suj() {
    }
    $rech = $bouton == '1' ? ag_translate('Par ville') : ag_translate('Par').' '.$bouton;
    $accesuj .= '
-      </select>
-   </li>';
+      </select>';
 
    $vuannu ='<li class="nav-item">
                <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.date("Y").'">'.ag_translate('Vue annuelle').'</a>
