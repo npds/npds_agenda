@@ -934,7 +934,7 @@ function ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admi
    $content .= "/************************************************************************/\n";
    $content .= "/* DUNE by NPDS                                                         */\n";
    $content .= "/*                                                                      */\n";
-   $content .= "/* NPDS Copyright (c) 2002-".date(Y)." by Philippe Brunier                     */\n";
+   $content .= "/* NPDS Copyright (c) 2002-".date('Y')." by Philippe Brunier                     */\n";
    $content .= "/*                                                                      */\n";
    $content .= "/* This program is free software. You can redistribute it and/or modify */\n";
    $content .= "/* it under the terms of the GNU General Public License as published by */\n";
@@ -964,7 +964,7 @@ function ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admi
       $content .= "/************************************************************************/\n";
       $content .= "/* DUNE by NPDS                                                         */\n";
       $content .= "/*                                                                      */\n";
-      $content .= "/* NPDS Copyright (c) 2002-".date(Y)." by Philippe Brunier                     */\n";
+      $content .= "/* NPDS Copyright (c) 2002-".date('Y')." by Philippe Brunier                     */\n";
       $content .= "/*                                                                      */\n";
       $content .= "/* This program is free software. You can redistribute it and/or modify */\n";
       $content .= "/* it under the terms of the GNU General Public License as published by */\n";
