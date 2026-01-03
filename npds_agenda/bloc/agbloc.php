@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2026 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -16,25 +16,25 @@
 global $language, $user, $cookie, $nuke_url, $mois, $annee;
 $ModPath = 'npds_agenda';
 
-include_once('modules/'.$ModPath.'/lang/agenda-'.$language.'.php');
-require_once('modules/'.$ModPath.'/ag_fonc.php');
-include('modules/'.$ModPath.'/admin/config.php');
-$content='';
+include_once 'modules/'.$ModPath.'/lang/agenda-'.$language.'.php';
+require_once 'modules/'.$ModPath.'/ag_fonc.php';
+include 'modules/'.$ModPath.'/admin/config.php';
+$content = '';
 
 // Récupération du jour, mois, et année actuelle
-$Bjour_actuel = date("j", time());
-$Bmois_actuel = date("m", time());
-$Ban_actuel = date("Y", time());
+$Bjour_actuel = date('j', time());
+$Bmois_actuel = date('m', time());
+$Ban_actuel = date('Y', time());
 $Bjour = $Bjour_actuel;
 
 // Si la variable mois n'existe pas, mois et année correspondent au mois et à l'année courante
-if(!isset($_GET["b_mois"])) {
+if(!isset($_GET['b_mois'])) {
    $month = $Bmois_actuel;
    $an = $Ban_actuel;
 }
 else {
-   $Bmois_actuel = $_GET["b_mois"];
-   $Ban_actuel=$_GET["b_an"];
+   $Bmois_actuel = $_GET['b_mois'];
+   $Ban_actuel = $_GET['b_an'];
 }
 
 $content .= calend($Ban_actuel,$Bmois_actuel,1);
@@ -60,5 +60,5 @@ if(autorisation(-127))
    $content .= '
    <div class="mt-2 text-end">
       <a href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=npds_agenda&amp;ModStart=admin/adm" title="Admin" data-bs-toggle="tooltip" data-bs-placement="left"><i id="cogs" class="fa fa-cogs fa-lg"></i></a>
-   </div> ';
+   </div>';
 ?>

@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2026 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -20,8 +20,8 @@ if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script
 
 // For More security
 
-include ('modules/'.$ModPath.'/admin/pages.php');
-include_once('modules/'.$ModPath.'/lang/agenda-'.$language.'.php');
+include 'modules/'.$ModPath.'/admin/pages.php';
+include_once 'modules/'.$ModPath.'/lang/agenda-'.$language.'.php';
 global $pdst, $language;
 settype($lettre,'string');
 settype($niv,'integer');
@@ -29,7 +29,7 @@ settype($niv,'integer');
 // DEBUT LISTE EVENEMENT PAR CHOIX
 function lieu($lettre, $niv) {
    global $ModPath, $NPDS_Prefix, $theme, $cookie, $ThisFile, $nb_news, $tipath, $bouton, $page, $na;
-   require_once('modules/'.$ModPath.'/pag_fonc.php');
+   require_once 'modules/'.$ModPath.'/pag_fonc.php';
 
    settype($page,'integer');
    settype($niv,'integer');
@@ -61,7 +61,7 @@ function lieu($lettre, $niv) {
       }
    }
    else {
-      include('modules/'.$ModPath.'/recherche/'.$bouton.'.php');
+      include 'modules/'.$ModPath.'/recherche/'.$bouton.'.php';
       if($lettre != '') {
          $cond = "AND ut.lieu LIKE '$lettre%'";
          $suite = ' '.ag_translate('pour').' '.$lettre;
@@ -181,7 +181,7 @@ function lieu($lettre, $niv) {
                   <img class="img-thumbnail col-2 mb-2" src="'.$tipath.''.$topicimage.'" />
                   <h4 class="card-title">'.$titre.'</h4>';
             $quipost = isset($cookie[1]) ? 'yes' : 'no';
-            if ($quipost == 'yes' and $cookie[1]==$posteur)
+            if ($quipost == 'yes' and $cookie[1] == $posteur)
                $affeven .= '
                   <div class="btn-group">
                      <a class="btn btn-outline-primary btn-sm me-2" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
@@ -283,10 +283,10 @@ function lieu($lettre, $niv) {
    /*Parametres utilises par le script*/
    $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart.'';
    $ThisRedo = 'modules.php?ModPath='.$ModPath.'&ModStart=calendrier';
-   include('header.php');
-   include('modules/'.$ModPath.'/admin/config.php');
-   require_once('modules/'.$ModPath.'/ag_fonc.php');
-   include ('modules/'.$ModPath.'/cache.timings.php');
+   include 'header.php';
+   include 'modules/'.$ModPath.'/admin/config.php';
+   require_once 'modules/'.$ModPath.'/ag_fonc.php';
+   include 'modules/'.$ModPath.'/cache.timings.php';
 
    if ($SuperCache) {
       $cache_obj = new cacheManager();
@@ -304,5 +304,5 @@ function lieu($lettre, $niv) {
    }
    if ($SuperCache)
       $cache_obj->endCachingPage();
-include("footer.php");
+include 'footer.php';
 ?>

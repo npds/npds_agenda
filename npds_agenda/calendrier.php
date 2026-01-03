@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2026 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -18,9 +18,9 @@
 if (!stristr($_SERVER['PHP_SELF'],"modules.php")) die();
 if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
    die();
-settype($niv,"integer");
-settype($sup,"integer");//à voir cohérence
-settype($inf,"integer");//à voir cohérence
+settype($niv,'integer');
+settype($sup,'integer');//à voir cohérence
+settype($inf,'integer');//à voir cohérence
 
 // DEBUT LISTE EVENEMENT
 function listsuj($sujet, $niv) {
@@ -28,20 +28,20 @@ function listsuj($sujet, $niv) {
    $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier';
 
    /*Debut securite*/
-   settype($sujet,"integer");
-   settype($niv,"integer");
-   settype($page,"integer");
-   settype($cs1,"string");
-   settype($cs,"string");
+   settype($sujet,'integer');
+   settype($niv,'integer');
+   settype($page,'integer');
+   settype($cs1,'string');
+   settype($cs,'string');
 
-   settype($sup,"integer");
-   settype($inf,"integer");
-   settype($datepourmonmodal,"string");
+   settype($sup,'integer');
+   settype($inf,'integer');
+   settype($datepourmonmodal,'string');
 
    /*Fin securite*/
-   require_once('modules/'.$ModPath.'/pag_fonc.php');
+   require_once 'modules/'.$ModPath.'/pag_fonc.php';
    //debut theme html partie 1/2
-   $inclusion = "modules/".$ModPath."/html/listsuj.html";
+   $inclusion = 'modules/'.$ModPath.'/html/listsuj.html';
    //fin theme html partie 1/2
 
 /*Gestion naviguation en cours ou passe*/
@@ -215,7 +215,7 @@ function listsuj($sujet, $niv) {
                <hr class="my-4" />
                <p class="card-text">';
             $quipost = isset($cookie[1]) ? 'yes' : 'no';
-            if ($quipost == 'yes' and $cookie[1]==$posteur)
+            if ($quipost == 'yes' and $cookie[1] == $posteur)
                $affres .= '
                   <a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
                   <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
@@ -236,7 +236,7 @@ function listsuj($sujet, $niv) {
 
    /*debut theme html partie 2/2*/
    ob_start();
-   include ($inclusion);
+   include $inclusion;
    $Xcontent = ob_get_contents();
    ob_end_clean();
    $npds_METALANG_words = array("'!topictext!'i"=>"$topictext","'!affres!'i"=>"$affres");
@@ -249,16 +249,16 @@ function listsuj($sujet, $niv) {
 /// DEBUT FONCTION JOUR ///
 function jour($date) {
    global $ModPath, $NPDS_Prefix, $theme, $cookie, $ThisFile, $nb_news, $tipath, $page;
-   $affeven=''; $datepourmonmodal='';
+   $affeven = ''; $datepourmonmodal = '';
    //Debut securite
    settype($page,"integer");
    $date = removeHack($date);
    //Fin securite
-   require_once('modules/'.$ModPath.'/pag_fonc.php');
+   require_once 'modules/'.$ModPath.'/pag_fonc.php';
    //Gestion naviguation en cours ou passe
    $now = date('Y-m-d');
 
-//Total pour naviguation
+   //Total pour naviguation
    settype($nb_entrees,'integer');
    $req1 = sql_query("SELECT
          ut.groupvoir
@@ -374,7 +374,7 @@ function jour($date) {
                            </div>
                            <div class="modal-body">
                               <h5 class="'.$etat.'"><strong>';
-            $affeven .= $tot > 1? $datepourmonmodal : $newdate;
+            $affeven .= $tot > 1 ? $datepourmonmodal : $newdate;
             $affeven .= '</strong></h5>
                               <div class="row">
                                  <div class="col-md-2">'.ag_translate('Résumé').'</div>
@@ -397,7 +397,7 @@ function jour($date) {
    }
 /*debut theme html partie 2/2*/
    ob_start();
-   include ("modules/".$ModPath."/html/jour.html");
+   include 'modules/'.$ModPath.'/html/jour.html';
    $Xcontent = ob_get_contents();
    ob_end_clean();
    $npds_METALANG_words = array(
@@ -410,19 +410,17 @@ function jour($date) {
 /*Affiche pagination*/
    echo ag_pag($total_pages,$page_courante,'2',''.$ThisFile.'&amp;subop=jour&amp;date='.$date.'','_mod');
 }
-/// FIN JOUR ///
 
-/// DEBUT FICHE ///
 function fiche($date, $id) {
    global $ModPath, $NPDS_Prefix, $cookie, $theme, $ThisFile, $nb_news, $tipath;
    //Debut securite
-   settype($id,"integer");
+   settype($id,'integer');
    $date = removeHack($date);
    //Fin securite
 
    //debut theme html partie 1/2
 //   $inclusion = false;
-   $inclusion = "modules/".$ModPath."/html/fiche.html";
+   $inclusion = 'modules/'.$ModPath.'/html/fiche.html';
 
    //fin theme html partie 1/2
 
@@ -505,57 +503,51 @@ function fiche($date, $id) {
    );
    echo meta_lang(aff_langue(preg_replace(array_keys($npds_METALANG_words),array_values($npds_METALANG_words), $Xcontent)));
 //fin theme html partie 2/2
-
 }
-/// FIN FICHE ///
 
-////////////////////
-/// FIN FONCTION ///
-////////////////////
+include 'modules/'.$ModPath.'/admin/pages.php';
+global $pdst, $language;
+include_once 'modules/'.$ModPath.'/lang/agenda-'.$language.'.php';
+settype($subop,'string');
+settype($an,'integer');
+settype($month,'integer');
 
-   include ('modules/'.$ModPath.'/admin/pages.php');
-   global $pdst, $language;
-   include_once('modules/'.$ModPath.'/lang/agenda-'.$language.'.php');
-   settype($subop,'string');
-   settype($an,'integer');
-   settype($month,'integer');
+/*Paramètres utilisés par le script*/
+$ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart;
+$ThisRedo = 'modules.php?ModPath='.$ModPath.'&ModStart='.$ModStart;
+$tipath = 'modules/'.$ModPath.'/images/categories/';
+include 'header.php';
+include 'modules/'.$ModPath.'/admin/config.php';
+require_once 'modules/'.$ModPath.'/ag_fonc.php';
+include 'modules/'.$ModPath.'/cache.timings.php';
+if ($SuperCache) {
+   $cache_obj = new cacheManager();
+   $cache_obj->startCachingPage();
+}
+else $cache_obj = new SuperCacheEmpty();
 
-   /*Paramètres utilisés par le script*/
-   $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart;
-   $ThisRedo = 'modules.php?ModPath='.$ModPath.'&ModStart='.$ModStart;
-   $tipath = 'modules/'.$ModPath.'/images/categories/';
-   include('header.php');
-   include('modules/'.$ModPath.'/admin/config.php');
-   require_once('modules/'.$ModPath.'/ag_fonc.php');
-   include ('modules/'.$ModPath.'/cache.timings.php');
-   if ($SuperCache) {
-      $cache_obj = new cacheManager();
-      $cache_obj->startCachingPage();
+if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
+   switch($subop) {
+      default:
+         echo suj();
+         $an = date('Y', time());
+         $month = date('m', time());
+         echo calend($an, $month, 0);
+      break;
+      case 'listsuj':
+         echo suj();
+         listsuj($sujet, $niv);
+      break;
+      case 'jour':
+         echo suj();
+         jour($date);
+      break;
+      case 'fiche':
+         echo suj();
+         fiche($date, $id);
+      break;
    }
-   else $cache_obj = new SuperCacheEmpty();
-
-   if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1) or (!$SuperCache)) {
-      switch($subop) {
-         default:
-            echo suj();
-            $an = date("Y", time());
-            $month = date("m", time());
-            echo calend($an, $month, 0);
-         break;
-         case 'listsuj':
-            echo suj();
-            listsuj($sujet, $niv);
-         break;
-         case 'jour':
-            echo suj();
-            jour($date);
-         break;
-         case 'fiche':
-            echo suj();
-            fiche($date, $id);
-         break;
-      }
-   }
-   if ($SuperCache) $cache_obj->endCachingPage();
-include("footer.php");
+}
+if ($SuperCache) $cache_obj->endCachingPage();
+include 'footer.php';
 ?>

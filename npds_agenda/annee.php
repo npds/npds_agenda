@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2026 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -27,7 +27,7 @@ function listsuj($an) {
    global $NPDS_Prefix, $ModPath, $theme, $ThisFile;
    settype($an,'integer');
    if ($an == '')
-      $an = date("Y", time());
+      $an = date('Y', time());
    $prec = ($an - 1);
    $suiv = ($an + 1);
    echo '
@@ -35,7 +35,7 @@ function listsuj($an) {
    <div class="card-body">';
    //debut theme html partie 1/2
    $inclusion = false;
-      $inclusion = "modules/".$ModPath."/html/annee.html";
+      $inclusion = 'modules/'.$ModPath.'/html/annee.html';
    echo '
    <h4 class="text-center mb-3">
       <a class="btn btn-outline-secondary border-0" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.$prec.'"><i class="fa fa-chevron-left align-middle" aria-hidden="true"></i></a>
@@ -66,17 +66,17 @@ function listsuj($an) {
 
 /// FIN FONCTION
 
-include ('modules/'.$ModPath.'/admin/pages.php');
-include_once('modules/'.$ModPath.'/lang/agenda-'.$language.'.php');
+include 'modules/'.$ModPath.'/admin/pages.php';
+include_once 'modules/'.$ModPath.'/lang/agenda-'.$language.'.php';
 global $pdst, $language;
 
    /*Paramètres utilisés par le script*/
    $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart;
    $ThisRedo = 'modules.php?ModPath='.$ModPath.'&ModStart=calendrier';
-   include('header.php');
-   include('modules/'.$ModPath.'/admin/config.php');
-   require_once('modules/'.$ModPath.'/ag_fonc.php');
-   include ('modules/'.$ModPath.'/cache.timings.php');
+   include 'header.php';
+   include 'modules/'.$ModPath.'/admin/config.php';
+   require_once 'modules/'.$ModPath.'/ag_fonc.php';
+   include 'modules/'.$ModPath.'/cache.timings.php';
 
    settype($subop,'string');
    settype($an,'integer');//à controler effet

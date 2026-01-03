@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2026 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -47,7 +47,7 @@ function ajout($month, $an, $debut) {
          <div class="form-label">'.ag_translate('Jour(s) sélectionné(s)').'<span class="text-danger ms-2">*</span></div>
          <div class="border rounded p-2 mb-3">';
       $name = explode(',',$debut);
-      $ibidcount =sizeof($name);
+      $ibidcount = sizeof($name);
       for ($i = 0; $i < $ibidcount; $i++ ) {
          echo '<a class="code btn btn-outline-secondary btn-sm me-1 mt-1 border-0" href="'.$ThisFile.'&amp;subop=retire&amp;ladate='.$name[$i].'&amp;debut='.$debut.'&amp;month='.$month.'&amp;an='.$an.'">'.formatfrancais($name[$i]).'<i class="fa fa-trash text-danger ms-2 align-middle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="'.ag_translate("Supprimer").'"></i></a>';
       }
@@ -99,7 +99,7 @@ function ajout($month, $an, $debut) {
       echo '
                <input class="form-control" type="text" id="lieu" name="lieu" />';
    else {
-      include('modules/'.$ModPath.'/recherche/'.$bouton.'.php');
+      include 'modules/'.$ModPath.'/recherche/'.$bouton.'.php';
       echo '
                <select class="custom-select form-control" name="lieu">
                   <option>'.ag_translate('Sélection région ou département').'</option>';
@@ -145,35 +145,32 @@ function catcreer ($debut, $topicid, $groupvoir, $titre, $desc, $longdesc, $lieu
       <div class="float-end"><a class="btn btn-secondary btn-sm" href="javascript:history.back()">'.ag_translate('Retour').'</a></div>';
    }
    else {
-
-   /*Enregistrement demande*/
-   $result = sql_query("INSERT INTO ".$NPDS_Prefix."agend_dem SET id = '', titre = '$titre', intro = '$desc', descript = '$longdesc', lieu = '$lieu', topicid = '$topicid', posteur = '$member', groupvoir = '$groupvoir', valid = '$valid'");
-
-   /*Recupere id demande*/
-   $result1 = sql_query("SELECT id FROM ".$NPDS_Prefix."agend_dem ORDER BY id DESC LIMIT 0,1");
-   list($sid) = sql_fetch_row($result1);
-   $namel = explode(',',$debut);
-   sort($namel);
-   for ($i = 0; $i < sizeof($namel); $i++) {
-      /*Insertion des dates*/
-      $query = "INSERT INTO ".$NPDS_Prefix."agend values ('', '$namel[$i]', '$sid')";
-      sql_query($query) or die(sql_error());
-   }
-   if ($query) {
-
-   //Envoi mail si actif dans config
-   if ($courriel == 1 || $receveur != '') { 
-      $sujet = ag_translate('Evénement nouveau dans agenda');
-      $sujet=html_entity_decode($sujet, ENT_COMPAT, 'UTF-8');
-      $message = ag_translate('Un événement nouveau est à valider dans agenda').'.<br /><br />';
-      include("signat.php");
-      send_email($receveur,$sujet,$message,'',true,"html");
-   }
-   if ($valid == 3)
-      echo '<p class="alert alert-success lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Merci pour votre contribution, un administrateur la validera rapidement').'</p>';
-   else if ($valid == 1)
-      echo '<p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Votre nouvel événement à bien été ajouté à l\'agenda').'</p>';
-   }
+      /*Enregistrement demande*/
+      $result = sql_query("INSERT INTO ".$NPDS_Prefix."agend_dem SET id = '', titre = '$titre', intro = '$desc', descript = '$longdesc', lieu = '$lieu', topicid = '$topicid', posteur = '$member', groupvoir = '$groupvoir', valid = '$valid'");
+      /*Recupere id demande*/
+      $result1 = sql_query("SELECT id FROM ".$NPDS_Prefix."agend_dem ORDER BY id DESC LIMIT 0,1");
+      list($sid) = sql_fetch_row($result1);
+      $namel = explode(',',$debut);
+      sort($namel);
+      for ($i = 0; $i < sizeof($namel); $i++) {
+         /*Insertion des dates*/
+         $query = "INSERT INTO ".$NPDS_Prefix."agend values ('', '$namel[$i]', '$sid')";
+         sql_query($query) or die(sql_error());
+      }
+      if ($query) {
+         //Envoi mail si actif dans config
+         if ($courriel == 1 || $receveur != '') { 
+            $sujet = ag_translate('Evénement nouveau dans agenda');
+            $sujet = html_entity_decode($sujet, ENT_COMPAT, 'UTF-8');
+            $message = ag_translate('Un événement nouveau est à valider dans agenda').'.<br /><br />';
+            include 'signat.php';
+            send_email($receveur,$sujet,$message,'',true,'html');
+         }
+         if ($valid == 3)
+            echo '<p class="alert alert-success lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Merci pour votre contribution, un administrateur la validera rapidement').'</p>';
+         else if ($valid == 1)
+            echo '<p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Votre nouvel événement à bien été ajouté à l\'agenda').'</p>';
+      }
    }
 }
 // FIN VALID AJOUT
@@ -200,11 +197,11 @@ function retire($ladate, $debut, $month, $an) {
 
 //Affichage de la page
 
-include ('modules/'.$ModPath.'/admin/pages.php');
-include_once('modules/'.$ModPath.'/lang/agenda-'.$language.'.php');
-include('modules/'.$ModPath.'/admin/config.php');
-include_once('modules/'.$ModPath.'/ag_fonc.php');
-include('header.php');
+include 'modules/'.$ModPath.'/admin/pages.php';
+include_once 'modules/'.$ModPath.'/lang/agenda-'.$language.'.php';
+include 'modules/'.$ModPath.'/admin/config.php';
+include_once 'modules/'.$ModPath.'/ag_fonc.php';
+include 'header.php';
 
 /*Paramètres utilisés par le script*/
    $ThisFile = 'modules.php?ModPath='.$ModPath.'&ModStart='.$ModStart;
@@ -234,5 +231,5 @@ include('header.php');
    }
    else
       redirect_url('index.php');
-   include('footer.php');
+   include 'footer.php';
 ?>

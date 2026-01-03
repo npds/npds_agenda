@@ -27,7 +27,7 @@ function convertion($date) {
    $an  = substr($date, 0, 4);
 
 // On retourne un tableau contenant les deux variables
-   return array( $mois, $an);
+   return array($mois, $an);
 }
 
 // Date au format aaaa-mm-jj et rajoute 0 quand inferieur a 10
@@ -116,8 +116,8 @@ function ferie($mois, $an) {
    $ferie[ag_translate('Toussaint')][11] = 1;
    $ferie[ag_translate('Armistice 14-18')][11] = 11;
    $ferie[ag_translate('Assomption')][8] =15;
-   $ferie[ag_translate('Fête du travail')][5] =1;
-   $ferie[ag_translate('Fête nationale')][7] =14;
+   $ferie[ag_translate('Fête du travail')][5] = 1;
+   $ferie[ag_translate('Fête nationale')][7] = 14;
    $ferie[ag_translate('Noël')][12] = 25;
    $ferie[$lundi_de_paques['nom']][$lundi_de_paques['mois']] = $lundi_de_paques['jour'];
    $ferie[$lundi_de_pentecote['nom']][$lundi_de_pentecote['mois']] = $lundi_de_pentecote['jour'];
@@ -129,7 +129,7 @@ function ferie($mois, $an) {
    foreach($ferie as $nom => $date) {
       if (isset($date[$mois])) {
       // Une fête à date calculable
-         $reponse[$date[$mois]]=$nom;
+         $reponse[$date[$mois]] = $nom;
       }
    }
    ksort($reponse);
@@ -158,17 +158,17 @@ function mois($nb) {
 // construction calendrier visualisation
 function calend($an, $month, $calblock) {
    global $ModPath, $NPDS_Prefix, $ThisFile;
-   $p_m='month'; $p_a='an';
-   if ($calblock==1) { 
-      $ThisFile=$_SERVER['REQUEST_URI'];
+   $p_m = 'month'; $p_a = 'an';
+   if ($calblock == 1) { 
+      $ThisFile = $_SERVER['REQUEST_URI'];
       $ThisFile = !strstr($ThisFile,'?') ? $ThisFile.'?' : $ThisFile ;
       $ThisFile = preg_replace('#(&b_.*)$#', '', $ThisFile);
-      $p_m='b_mois';
-      $p_a='b_an';
+      $p_m = 'b_mois';
+      $p_a = 'b_an';
    }
       $ThisFile = preg_replace('#(&month.*)$#', '', $ThisFile);
 
-   $output='';
+   $output = '';
    $jour_actuel = date("j", time());
    $mois_actuel = date("m", time());
    $an_actuel = date("Y", time());
@@ -227,10 +227,10 @@ function calend($an, $month, $calblock) {
    }
 
 
-   $m_prec=($month-1); $m_suiv=($month+1);
-   $a_prec=$an; $a_suiv=$an;
-   if($month==1) {$m_prec=12;$a_prec=$an-1;};
-   if($month==12) {$m_suiv=1;$a_suiv=$an+1;};
+   $m_prec = ($month-1); $m_suiv = ($month+1);
+   $a_prec = $an; $a_suiv = $an;
+   if($month == 1) {$m_prec = 12;$a_prec = $an - 1;};
+   if($month == 12) {$m_suiv = 1;$a_suiv = $an + 1;};
 
    $output .= '
    <p class="text-center">
@@ -318,7 +318,7 @@ function cal($an, $month, $debut, $morurl) {
    global $ModPath, $ThisFile, $ModStart;
    $debut = removeHack($debut);
 
-   $output='';
+   $output = '';
    $jour_actuel = date("j", time());
    $mois_actuel = (integer)date("m", time());
    $an_actuel = (integer)date("Y", time());
@@ -328,18 +328,18 @@ function cal($an, $month, $debut, $morurl) {
       $month = $mois_actuel;
       $an = $an_actuel;
    } else { 
-      $month=$_GET["month"];
-      $an=$_GET["an"];
+      $month = $_GET["month"];
+      $an = $_GET["an"];
    }
 
    settype($month,'integer');
    settype($an,'integer');
 
    $nbjour = cal_days_in_month( CAL_GREGORIAN, $month, $an); // nombre de jour dans le mois
-   $m_prec=($month-1); $m_suiv=($month+1);
-   $a_prec=$an; $a_suiv=$an;
-   if($month==1) {$m_prec=12;$a_prec=$an-1;};
-   if($month==12) {$m_suiv=1;$a_suiv=$an+1;};
+   $m_prec = ($month - 1); $m_suiv = ($month + 1);
+   $a_prec = $an; $a_suiv = $an;
+   if($month == 1) {$m_prec = 12; $a_prec = $an - 1;}
+   if($month == 12) {$m_suiv = 1; $a_suiv = $an + 1;}
 
    $output .= '
    
@@ -436,7 +436,7 @@ function suj() {
    global $NPDS_Prefix, $ModPath, $theme, $bouton, $ThisRedo, $ThisFile, $gro, $stopicid;
    //debut theme html partie 1/2
    settype($ajeven,'string');
-   $inclusion = "modules/".$ModPath."/html/sujet.html";
+   $inclusion = 'modules/'.$ModPath.'/html/sujet.html';
    //fin theme html partie 1/2
    //Si membre appartient au bon groupe
    if(autorisation($gro)) {
@@ -464,16 +464,16 @@ function suj() {
    $accesuj .= '
       </select>';
 
-   $vuannu ='<li class="nav-item">
+   $vuannu = '<li class="nav-item">
                <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.date("Y").'">'.ag_translate('Vue annuelle').'</a>
             </li>';
-   $vulieu ='<li class="nav-item">
+   $vulieu = '<li class="nav-item">
                <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=lieu">'.$rech.'</a>
             </li>';
 
    //debut theme html partie 2/2
    ob_start();
-   include ($inclusion);
+   include $inclusion;
    $Xcontent = ob_get_contents();
    ob_end_clean();
    $npds_METALANG_words = array(
