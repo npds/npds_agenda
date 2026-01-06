@@ -65,10 +65,9 @@ function listsuj($an) {
 
 
 /// FIN FONCTION
-
+global $pdst, $language;
 include 'modules/'.$ModPath.'/admin/pages.php';
 include_once 'modules/'.$ModPath.'/lang/agenda-'.$language.'.php';
-global $pdst, $language;
 
    /*Paramètres utilisés par le script*/
    $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart;
@@ -103,5 +102,5 @@ global $pdst, $language;
    }
    if ($SuperCache)
       $cache_obj->endCachingPage();
-   include("footer.php");
+   include 'footer.php';
 ?>

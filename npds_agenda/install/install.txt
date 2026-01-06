@@ -38,6 +38,6 @@
 ## include#modules/npds_agenda/bloc/agbloc.php
 ##
 ## COMMUNAUTE: 
-## Support NPDS : http://modules.npds.org
+## Support NPDS : https://www.npds.org
 ##
 #######################################################################################

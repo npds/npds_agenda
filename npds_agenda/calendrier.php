@@ -289,7 +289,7 @@ function jour($date) {
    $start = ($page_courante * $nb_news - $nb_news);
    $retour = convertion($date);
    $datetime = formatfrancais($date);
-   $bandeau = '<a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath=npds_agenda&ModStart=calendrier&amp;month='.$retour[0].'&amp;an='.$retour[1].'">'.ag_translate('Retour au calendrier').'</a>';
+   $bandeau = '<a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier&amp;month='.$retour[0].'&amp;an='.$retour[1].'">'.ag_translate('Retour au calendrier').'</a>';
    $lejour = $datetime;
    if ($nb_entrees == 0)
       $affeven = '<p><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Rien de prévu ce jour').'</p>';

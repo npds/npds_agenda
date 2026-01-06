@@ -19,29 +19,23 @@ global $ModPath;
 */
 // Transforme date (aaa-mm-jj) en deux variables $mois (mm) et $an (aa)
 function convertion($date) {
-
-// Récupère les 2 caractères après le 5eme caractère de $ date (aaaa-mm-jj donne mm)
+   // Récupère les 2 caractères après le 5eme caractère de $ date (aaaa-mm-jj donne mm)
    $mois = substr($date, 5, 2);
-
-// Récupère les 4 premiers caratères de $ date (aaaa-mm-jj donne aaaa)
+   // Récupère les 4 premiers caratères de $ date (aaaa-mm-jj donne aaaa)
    $an  = substr($date, 0, 4);
-
-// On retourne un tableau contenant les deux variables
+   // On retourne un tableau contenant les deux variables
    return array($mois, $an);
 }
 
 // Date au format aaaa-mm-jj et rajoute 0 quand inferieur a 10
 function ajout_zero($jj, $mm, $aa) {
-
-// Ajoute un 0 pour jour
-   if($jj <= 9 && substr($jj, 0, 1)!= 0)
+   // Ajoute un 0 pour jour
+   if($jj <= 9 && substr($jj, 0, 1) != 0)
       $jj  = '0'.$jj;
-
-// Ajoute un 0 pour mois
-   if($mm <= 9 && substr($mm, 0, 1)!= 0)
+   // Ajoute un 0 pour mois
+   if($mm <= 9 && substr($mm, 0, 1) != 0)
       $mm  = '0'.$mm;
-
-// Retourne sous la forme aaaa-mm-jj
+   // Retourne sous la forme aaaa-mm-jj
    $retour = (string)$aa.'-'.$mm.'-'.$jj;
    return $retour;
 }
@@ -70,11 +64,11 @@ function easter_date2($Year) {
 
 // Calcul les jours fériés
 function ferie($mois, $an) {
-
-/* pour avoir tous les jours fériés de l'année,
+   /* pour avoir tous les jours fériés de l'année,
    passez un tableau de mois (férié(range(1, 12), $an);
    pour les avoir sur plusieurs années
-   férié(range(1, 24), $an); férié(range(36, 12), $an);*/
+   férié(range(1, 24), $an); férié(range(36, 12), $an);
+   */
    if (is_array($mois)) {
       $retour = array();
       foreach ($mois as $m) {
@@ -84,30 +78,28 @@ function ferie($mois, $an) {
       return $retour;
    }
 
-// Calcul des jours fériés pour un seul mois.
+   // Calcul des jours fériés pour un seul mois.
    if (mktime(0, 0, 0, $mois, 1, $an) == -1)
-   {
       return FALSE;
-   }
-   list($mois, $an) = explode("-", date("m-Y", mktime(0, 0, 0, $mois, 1, $an)));
+   list($mois, $an) = explode('-', date('m-Y', mktime(0, 0, 0, $mois, 1, $an)));
    $an = intval($an);
    $mois = intval($mois);
 
-// Une constante
+   // Une constante
    $jour = 3600*24;
    
-// Quelques fêtes mobiles
-   $lundi_de_paques['mois'] = date( "n", easter_date2($an)+1*$jour);
-   $lundi_de_paques['jour'] = date( "j", easter_date2($an)+1*$jour);
+   // Quelques fêtes mobiles
+   $lundi_de_paques['mois'] = date( 'n', easter_date2($an)+1*$jour);
+   $lundi_de_paques['jour'] = date( 'j', easter_date2($an)+1*$jour);
    $lundi_de_paques['nom'] = ag_translate('Lundi de Pâques');
-   $ascencion['mois'] = date( "n", easter_date2($an)+39*$jour);
-   $ascencion['jour'] = date( "j", easter_date2($an)+39*$jour);
+   $ascencion['mois'] = date( 'n', easter_date2($an)+39*$jour);
+   $ascencion['jour'] = date( 'j', easter_date2($an)+39*$jour);
    $ascencion['nom'] = ag_translate('Jeudi de l\'ascension');
-   $vendredi_saint['mois'] = date( "n", easter_date2($an)-2*$jour);
-   $vendredi_saint['jour'] = date( "j", easter_date2($an)-2*$jour);
+   $vendredi_saint['mois'] = date( 'n', easter_date2($an)-2*$jour);
+   $vendredi_saint['jour'] = date( 'j', easter_date2($an)-2*$jour);
    $vendredi_saint['nom'] = ag_translate('Vendredi Saint');
-   $lundi_de_pentecote['mois'] = date( "n", easter_date2($an)+50*$jour);
-   $lundi_de_pentecote['jour'] = date( "j", easter_date2($an)+50*$jour);
+   $lundi_de_pentecote['mois'] = date( 'n', easter_date2($an)+50*$jour);
+   $lundi_de_pentecote['jour'] = date( 'j', easter_date2($an)+50*$jour);
    $lundi_de_pentecote['nom'] = ag_translate('Lundi de Pentecôte');
 
 // France
@@ -169,16 +161,16 @@ function calend($an, $month, $calblock) {
       $ThisFile = preg_replace('#(&month.*)$#', '', $ThisFile);
 
    $output = '';
-   $jour_actuel = date("j", time());
-   $mois_actuel = date("m", time());
-   $an_actuel = date("Y", time());
+   $jour_actuel = date('j', time());
+   $mois_actuel = date('m', time());
+   $an_actuel = date('Y', time());
    //Si la variable mois nexiste pas, mois et annee correspondent au mois et a lannee courante
-/*
-   if(!isset($_GET["month"])) {
-      $month = $mois_actuel;
-      $an = $an_actuel;
-   }
-*/
+   /*
+      if(!isset($_GET["month"])) {
+         $month = $mois_actuel;
+         $an = $an_actuel;
+      }
+   */
    //Creation des tableaux
    for($j = 1; $j < 32; $j++) {
       $tab_jours[$j] = (bool)false;
@@ -226,18 +218,17 @@ function calend($an, $month, $calblock) {
       $nbjour =  days_in_month($month, $an);
    }
 
-
-   $m_prec = ($month-1); $m_suiv = ($month+1);
+   $m_prec = ($month - 1); $m_suiv = ($month + 1);
    $a_prec = $an; $a_suiv = $an;
-   if($month == 1) {$m_prec = 12;$a_prec = $an - 1;};
-   if($month == 12) {$m_suiv = 1;$a_suiv = $an + 1;};
+   if($month == 1) {$m_prec = 12; $a_prec = $an - 1;};
+   if($month == 12) {$m_suiv = 1; $a_suiv = $an + 1;};
 
    $output .= '
    <p class="text-center">
       <a class="btn btn-outline-secondary btn-sm border-0" href="'.$ThisFile.'&amp;'.$p_m.'='.$m_prec.'&amp;'.$p_a.'='.$a_prec.'"><i class="fa fa-chevron-left align-middle"></i></a>
-      <a class="btn btn-outline-secondary btn-sm border-0" href="modules.php?ModPath=npds_agenda&ModStart=calendrier&amp;month='.$month.'&amp;an='.$an.'">'.mois($month).'</a>
+      <a class="btn btn-outline-secondary btn-sm border-0" href="modules.php?ModPath='.$ModPath.'&ModStart=calendrier&amp;month='.$month.'&amp;an='.$an.'">'.mois($month).'</a>
       <a class="btn btn-outline-secondary btn-sm border-0" href="'.$ThisFile.'&amp;'.$p_m.'='.$m_suiv.'&amp;'.$p_a.'='.$a_suiv.'"><i class="fa fa-chevron-right align-middle"></i></a><br />
-      <a class="btn btn-outline-secondary btn-sm border-0 mt-1" href="modules.php?ModPath=npds_agenda&amp;ModStart=annee&amp;an='.$an.'">'.$an.'</a>
+      <a class="btn btn-outline-secondary btn-sm border-0 mt-1" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.$an.'">'.$an.'</a>
   </p>
    <table class="table table-bordered table-sm">
       <thead class="table-secondary">
@@ -255,21 +246,21 @@ function calend($an, $month, $calblock) {
    for($i = 1; $nbjour >= $i; $i++) {
       $date = ajout_zero($i, $month, $an);
       settype($jour_actuel,'integer');
-      $cs='';
+      $cs = '';
       if ($i == $jour_actuel and $month == $mois_actuel and $an == $an_actuel) $cs = 'text-danger fw-bold';
       if ($tab_jours[$i] == 1 and $tab_jours_ferie[$i] == 1){
-         $cla='table-warning'; 
-         $lk='<a href="modules.php?ModPath=npds_agenda&amp;ModStart=calendrier&amp;subop=jour&amp;date='.$date.'"><span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="'.$fetetitre[$i].$afftitre[$i].'" style="padding:1px;" class="small d-block table-info '.$cs.'" >'.$i.'</span></a>';
+         $cla = 'table-warning'; 
+         $lk = '<a href="modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier&amp;subop=jour&amp;date='.$date.'"><span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="'.$fetetitre[$i].$afftitre[$i].'" style="padding:1px;" class="small d-block table-info '.$cs.'" >'.$i.'</span></a>';
       } else if($tab_jours[$i] == 1) {
-         $cla='table-info';
-         $lk='<a href="modules.php?ModPath=npds_agenda&amp;ModStart=calendrier&amp;subop=jour&amp;date='.$date.'"><span data-bs-toggle="tooltip" data-placement="bottom" data-bs-html="true" title="'.$afftitre[$i].'" style="padding:1px;" class="small d-block '.$cs.'">'.$i.'</span></a>';
+         $cla = 'table-info';
+         $lk = '<a href="modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier&amp;subop=jour&amp;date='.$date.'"><span data-bs-toggle="tooltip" data-placement="bottom" data-bs-html="true" title="'.$afftitre[$i].'" style="padding:1px;" class="small d-block '.$cs.'">'.$i.'</span></a>';
       } else if($tab_jours_ferie[$i] == 1) {
-         $cla='table-warning';
-         $lk='<span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="'.$fetetitre[$i].'" style="padding:1px;"class="small d-block '.$cs.'">'.$i.'</span>';
+         $cla = 'table-warning';
+         $lk = '<span data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-html="true" title="'.$fetetitre[$i].'" style="padding:1px;"class="small d-block '.$cs.'">'.$i.'</span>';
       }  
       else {
-         $cla='';
-         $lk='<span class="small d-block '.$cs.'">'.$i.'</span>';
+         $cla = '';
+         $lk = '<span class="small d-block '.$cs.'">'.$i.'</span>';
       }
 
       $p = cal_to_jd(CAL_GREGORIAN, $month, $i, $an); // formater jour
@@ -287,7 +278,7 @@ function calend($an, $month, $calblock) {
       <tr>';
          if($jourweek == 0)
             $jourweek = 7;
-         for($b = 1 ;$b != $jourweek; $b++) {
+         for($b = 1 ; $b != $jourweek; $b++) {
             $output .= '
          <td></td>';
          }
@@ -319,17 +310,17 @@ function cal($an, $month, $debut, $morurl) {
    $debut = removeHack($debut);
 
    $output = '';
-   $jour_actuel = date("j", time());
-   $mois_actuel = (integer)date("m", time());
-   $an_actuel = (integer)date("Y", time());
+   $jour_actuel = date('j', time());
+   $mois_actuel = (integer)date('m', time());
+   $an_actuel = (integer)date('Y', time());
    //Si la variable mois nexiste pas, mois et annee correspondent au mois et a lannee courante
 
-   if(!isset($_GET["month"])) {
+   if(!isset($_GET['month'])) {
       $month = $mois_actuel;
       $an = $an_actuel;
    } else { 
-      $month = $_GET["month"];
-      $an = $_GET["an"];
+      $month = $_GET['month'];
+      $an = $_GET['an'];
    }
 
    settype($month,'integer');
@@ -342,7 +333,6 @@ function cal($an, $month, $debut, $morurl) {
    if($month == 12) {$m_suiv = 1; $a_suiv = $an + 1;}
 
    $output .= '
-   
    <p class="text-center">
       <a class="btn btn-outline-secondary btn-sm border-0" href="'.$ThisFile.$morurl.'&amp;month='.$m_prec.'&amp;an='.$a_prec.'&amp;debut='.$debut.'"><i class="fa fa-chevron-left align-middle"></i></a>
       <a class="btn btn-outline-secondary btn-sm border-0" href="'.$ThisFile.$morurl.'&amp;month='.$month.'&amp;an='.$an.'&amp;debut='.$debut.'">'.mois($month).'</a>
@@ -368,9 +358,8 @@ function cal($an, $month, $debut, $morurl) {
    for($i = 1; $nbjour >= $i; $i++) {
       $date = ajout_zero($i, $month, $an);
       settype($jour_actuel,'integer');
-      $cs='';
+      $cs = '';
       if ($i == $jour_actuel and $month == $mois_actuel and $an == $an_actuel) $cs = 'text-danger fw-bold';
-
       if ($debut == '')
          $newlien = $date;
       else
@@ -379,10 +368,10 @@ function cal($an, $month, $debut, $morurl) {
          $pos = strpos($debut, $date);
          if ($pos === false) {
             $lk = '<a class="btn btn-outline-primary btn-sm w-100" href="'.$ThisFile.$morurl.'&amp;month='.$month.'&amp;an='.$an.'&amp;debut='.$newlien.'">'.$i.'</a>';
-            $cla='table-primary';
+            $cla = 'table-primary';
          } else {
-            $lk= '<span class="d-block w-100 border rounded '.$cs.'" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Réservée">'.$i.'</span>';
-            $cla='table-light';
+            $lk = '<span class="d-block w-100 border rounded '.$cs.'" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Réservée">'.$i.'</span>';
+            $cla ='table-light';
          }
 
          $sem_num = date('W', strtotime($date));
@@ -463,9 +452,8 @@ function suj() {
    $rech = $bouton == '1' ? ag_translate('Par ville') : ag_translate('Par').' '.$bouton;
    $accesuj .= '
       </select>';
-
    $vuannu = '<li class="nav-item">
-               <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.date("Y").'">'.ag_translate('Vue annuelle').'</a>
+               <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.date('Y').'">'.ag_translate('Vue annuelle').'</a>
             </li>';
    $vulieu = '<li class="nav-item">
                <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=lieu">'.$rech.'</a>
@@ -478,10 +466,10 @@ function suj() {
    ob_end_clean();
    $npds_METALANG_words = array(
       "'!titre!'i"=>"<a class=\"btn btn-outline-primary btn-sm\" href=\"$ThisFile\"><i class=\"fa fa-home\" aria-hidden=\"true\"></i> ".ag_translate("Agenda")."</a>",
-      "'!ajeven!'i"=>"$ajeven",
-      "'!accesuj!'i"=>"$accesuj",
-      "'!vuannu!'i"=>"$vuannu",
-      "'!vulieu!'i"=>"$vulieu"
+      "'!ajeven!'i"=> $ajeven,
+      "'!accesuj!'i"=> $accesuj,
+      "'!vuannu!'i"=> $vuannu,
+      "'!vulieu!'i"=> $vulieu
    );
    $men = meta_lang(aff_langue(preg_replace(array_keys($npds_METALANG_words),array_values($npds_METALANG_words), $Xcontent)));
    return $men;

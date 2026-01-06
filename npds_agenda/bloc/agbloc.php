@@ -59,6 +59,6 @@ $content .= '
 if(autorisation(-127))
    $content .= '
    <div class="mt-2 text-end">
-      <a href="admin.php?op=Extend-Admin-SubModule&amp;ModPath=npds_agenda&amp;ModStart=admin/adm" title="Admin" data-bs-toggle="tooltip" data-bs-placement="left"><i id="cogs" class="fa fa-cogs fa-lg"></i></a>
+      <a href="admin.php?op=Extend-Admin-SubModule&amp;ModPath='.$ModPath.'&amp;ModStart=admin/adm" title="Admin" data-bs-toggle="tooltip" data-bs-placement="left"><i id="cogs" class="fa fa-cogs fa-lg"></i></a>
    </div>';
 ?>

@@ -25,15 +25,13 @@ if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script
 /// DEBUT AJOUT ///
 function ajout($month, $an, $debut) {
    global $NPDS_Prefix, $ModPath, $ModStart, $ThisFile, $user, $cookie, $menu, $bouton;
-
    //Debut securite
-//   settype($month,"integer");
-   settype($an,"integer");
-   settype($fin,"string");
+   //   settype($month,"integer");
+   settype($an,'integer');
+   settype($fin,'string');
    $debut = removeHack($debut);
    $fin = removeHack($fin);
    // Fin securite
-
    echo '
    <div class="card">
       <div class="card-body">
@@ -46,7 +44,7 @@ function ajout($month, $an, $debut) {
       echo '
          <div class="form-label">'.ag_translate('Jour(s) sélectionné(s)').'<span class="text-danger ms-2">*</span></div>
          <div class="border rounded p-2 mb-3">';
-      $name = explode(',',$debut);
+      $name = explode(',', $debut);
       $ibidcount = sizeof($name);
       for ($i = 0; $i < $ibidcount; $i++ ) {
          echo '<a class="code btn btn-outline-secondary btn-sm me-1 mt-1 border-0" href="'.$ThisFile.'&amp;subop=retire&amp;ladate='.$name[$i].'&amp;debut='.$debut.'&amp;month='.$month.'&amp;an='.$an.'">'.formatfrancais($name[$i]).'<i class="fa fa-trash text-danger ms-2 align-middle" data-bs-toggle="tooltip" data-bs-placement="bottom" title="'.ag_translate("Supprimer").'"></i></a>';
@@ -128,9 +126,9 @@ function ajout($month, $an, $debut) {
 function catcreer ($debut, $topicid, $groupvoir, $titre, $desc, $longdesc, $lieu, $statut, $member) {
    global $ModPath, $ModStart, $NPDS_Prefix, $ThisFile, $valid, $menu, $courriel, $receveur;
    /*Debut securite*/
-   settype($topicid,"integer");
-   settype($groupvoir,"integer");
-   settype($statut,"integer");
+   settype($topicid,'integer');
+   settype($groupvoir,'integer');
+   settype($statut,'integer');
    $titre = removeHack(addslashes($titre));
    $desc = removeHack(addslashes($desc));
    $lieu = removeHack(addslashes($lieu));
@@ -179,15 +177,15 @@ function catcreer ($debut, $topicid, $groupvoir, $titre, $desc, $longdesc, $lieu
 function retire($ladate, $debut, $month, $an) {
    global $ThisRedo;
    //Debut securite
-   settype($id,"integer");
-   settype($month,"integer");
-   settype($an,"integer");
+   settype($id,'integer');
+   settype($month,'integer');
+   settype($an,'integer');
    $debut = removeHack($debut);
    //Fin securite
 
    /*On rajoute une virgule qu'on enlève après sinon double virgules*/
    $debut1 = $debut.',';
-   $newdebut = str_replace("$ladate,", "", "$debut1");
+   $newdebut = str_replace("$ladate,", '', "$debut1");
    $newdebut = substr("$newdebut", 0, -1);
    redirect_url(''.$ThisRedo.'&subop=editevt&month='.$month.'&an='.$an.'&debut='.$newdebut.'');
 }
