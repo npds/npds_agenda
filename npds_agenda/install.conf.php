@@ -27,10 +27,10 @@ $name_module = 'npds_agenda';
 $path_adm_module = 'admin/adm';
 
 #autodoc $affich: pour l'affichage du nom du module dans l'admin
-$affich='npds_agenda';
+$affich = 'npds_agenda';
 
 #autodoc $icon: icon pour l'admin : c'est un nom de fichier(sans extension) !! #required SI admin avec interface
-$icon='npds_agenda';
+$icon = 'npds_agenda';
 
 #autodoc $list_fich : Modifications de fichiers: Dans le premier tableau, tapez le nom du fichier
 #autodoc et dans le deuxième, A LA MEME POSITION D'INDEX QUE LE PREMIER, tapez le code à insérer dans le fichier.
@@ -53,6 +53,9 @@ $sql = array("CREATE TABLE ".$NPDS_Prefix."agend (
   topictext mediumtext COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY  (topicid)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
+"INSERT INTO ".$NPDS_Prefix."agendsujet VALUES (1, 'sports.png', 'Sports');",
+"INSERT INTO ".$NPDS_Prefix."agendsujet VALUES (2, 'art.png', 'Culture');",
+"INSERT INTO ".$NPDS_Prefix."agendsujet VALUES (3, 'voyage.png', 'Voyages');",
 "CREATE TABLE ".$NPDS_Prefix."agend_dem (
   id int(11) NOT NULL AUTO_INCREMENT,
   titre mediumtext COLLATE utf8mb4_unicode_ci NOT NULL,
