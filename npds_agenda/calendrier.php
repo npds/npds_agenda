@@ -239,12 +239,11 @@ function listsuj($sujet, $niv) {
    include $inclusion;
    $Xcontent = ob_get_contents();
    ob_end_clean();
-   $npds_METALANG_words = array("'!topictext!'i"=>"$topictext","'!affres!'i"=>"$affres");
+   $npds_METALANG_words = array("'!topictext!'i" => $topictext, "'!affres!'i" => $affres);
    echo meta_lang(aff_langue(preg_replace(array_keys($npds_METALANG_words),array_values($npds_METALANG_words), $Xcontent)));
    /*fin theme html partie 2/2*/
 
 }
-/// FIN LISTE EVENEMENT ///
 
 /// DEBUT FONCTION JOUR ///
 function jour($date) {
@@ -323,14 +322,17 @@ function jour($date) {
             /*Si evenement plusieurs jours*/
             $result1 = sql_query("SELECT date FROM ".$NPDS_Prefix."agend WHERE liaison = '$liaison' ORDER BY date DESC");
             $tot = sql_num_rows($result1);
-            $affeven .= '
-                  <img class="img-thumbnail col-2" src="'.$tipath.''.$topicimage.'" />
-                  <h4 class="card-title">'.$titre.'</h4>';
             $quipost = isset($cookie[1]) ? 'yes' : 'no';
-            $affeven .= ($quipost == 'yes' and $cookie[1]==$posteur) ?
-                     '<a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
-                     <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a>' :
+            $affeven .= '
+                  <div class="d-flex justify-content-between mb-3">
+                     <img class="img-thumbnail col-2" src="'.$tipath.''.$topicimage.'" loading="lazy" />';
+            $affeven .= ($quipost == 'yes' and $cookie[1] == $posteur) ?
+                     '<div><a class="btn btn-outline-primary btn-sm me-2" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
+                     <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a></div>' :
                      '<p>'.ag_translate('Posté par').'&nbsp;'.$posteur.'</p>' ;
+            $affeven .= '
+                  </div>
+                  <h4 class="card-title">'.$titre.'</h4>';
           
             $affeven .= '<p class="card-text">';
             if ($tot > 1) {
@@ -362,7 +364,7 @@ function jour($date) {
             </div>
             <div class="row">
                <div class="col-md-12">
-                  <button type="button" class="btn btn-secondary btn-sm my-2" data-bs-toggle="modal" data-bs-target="#ev'.$id.'">
+                  <button type="button" class="btn btn-outline-primary btn-sm my-2" data-bs-toggle="modal" data-bs-target="#ev'.$id.'">
                   '.ag_translate('Voir la fiche').'
                   </button>
                   <div class="modal fade" id="ev'.$id.'" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -395,20 +397,20 @@ function jour($date) {
          }
       }
    }
-/*debut theme html partie 2/2*/
+   /*debut theme html partie 2/2*/
    ob_start();
    include 'modules/'.$ModPath.'/html/jour.html';
    $Xcontent = ob_get_contents();
    ob_end_clean();
    $npds_METALANG_words = array(
-      "'!bandeau!'i"=>"$bandeau",
-      "'!lejour!'i"=>"$lejour",
-      "'!affeven!'i"=>"$affeven"
+      "'!bandeau!'i" => $bandeau,
+      "'!lejour!'i" => $lejour,
+      "'!affeven!'i" => $affeven
    );
    echo meta_lang(aff_langue(preg_replace(array_keys($npds_METALANG_words),array_values($npds_METALANG_words), $Xcontent)));
-/*fin theme html partie 2/2*/
-/*Affiche pagination*/
-   echo ag_pag($total_pages,$page_courante,'2',''.$ThisFile.'&amp;subop=jour&amp;date='.$date.'','_mod');
+   /*fin theme html partie 2/2*/
+   /*Affiche pagination*/
+   echo ag_pag($total_pages,$page_courante,'2',$ThisFile.'&amp;subop=jour&amp;date='.$date,'_mod');
 }
 
 function fiche($date, $id) {
@@ -419,7 +421,7 @@ function fiche($date, $id) {
    //Fin securite
 
    //debut theme html partie 1/2
-//   $inclusion = false;
+   //   $inclusion = false;
    $inclusion = 'modules/'.$ModPath.'/html/fiche.html';
 
    //fin theme html partie 1/2
@@ -439,10 +441,9 @@ function fiche($date, $id) {
       $vide = '<p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Aucun événement trouvé').'</p>';
    else {
       list($titre, $intro, $descript, $lieu, $topicid, $posteur, $groupvoir) = sql_fetch_row($result);
-
       //Si membre appartient au bon groupe
       if(autorisation($groupvoir)) {
-      //Si evenement plusieur jours
+         //Si evenement plusieur jours
          $result1 = sql_query("SELECT date FROM ".$NPDS_Prefix."agend WHERE liaison = '$id' ORDER BY date DESC");
          $tot = sql_num_rows($result1);
          if ($posteur == $cookie[1]) {
@@ -450,7 +451,7 @@ function fiche($date, $id) {
             <a class="btn btn-danger-outline btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;date='.$date.'&amp;id='.$id.'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
          }
          else
-            $postepar = ''.ag_translate('Posté par').'&nbsp;'.$posteur.'</td>';
+            $postepar = ag_translate('Posté par').'&nbsp;'.$posteur.'</td>';
          $affres .= '</tr><tr><td>';
          if ($tot > 1) {
             $imgfle .= '<i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure sur plusieurs jours').'&nbsp;:&nbsp;
@@ -488,18 +489,18 @@ function fiche($date, $id) {
    $Xcontent = ob_get_contents();
    ob_end_clean();
    $npds_METALANG_words = array(
-      "'!bandeau!'i"=>"$bandeau",
-      "'!bandeau1!'i"=>"$bandeau1",
-      "'!lejour!'i"=>"$lejour",
-      "'!vide!'i"=>"$vide",
-      "'!imgfle!'i"=>"$imgfle",
-      "'!listjour!'i"=>"$listjour",
-      "'!titrefiche!'i"=>"$titrefiche",
-      "'!imgsuj!'i"=>"$imgsuj",
-      "'!resume!'i"=>"$resume",
-      "'!detail!'i"=>"$detail",
-      "'!lieu!'i"=>"$lieu",
-      "'!postepar!'i"=>"$postepar"
+      "'!bandeau!'i" => $bandeau,
+      "'!bandeau1!'i" => $bandeau1,
+      "'!lejour!'i" => $lejour,
+      "'!vide!'i" => $vide,
+      "'!imgfle!'i" => $imgfle,
+      "'!listjour!'i" => $listjour,
+      "'!titrefiche!'i" => $titrefiche,
+      "'!imgsuj!'i" => $imgsuj,
+      "'!resume!'i" => $resume,
+      "'!detail!'i" => $detail,
+      "'!lieu!'i" => $lieu,
+      "'!postepar!'i"=> $postepar
    );
    echo meta_lang(aff_langue(preg_replace(array_keys($npds_METALANG_words),array_values($npds_METALANG_words), $Xcontent)));
 //fin theme html partie 2/2
@@ -514,7 +515,7 @@ settype($month,'integer');
 
 /*Paramètres utilisés par le script*/
 $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart;
-$ThisRedo = 'modules.php?ModPath='.$ModPath.'&ModStart='.$ModStart;
+$ThisRedo = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart;
 $tipath = 'modules/'.$ModPath.'/images/categories/';
 include 'header.php';
 include 'modules/'.$ModPath.'/admin/config.php';

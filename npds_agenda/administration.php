@@ -23,15 +23,15 @@ if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script
 function vosajouts() {
    global $ModPath, $NPDS_Prefix, $cookie, $ThisFile, $nb_news, $order, $page;
    /*Debut securite*/
-   settype($page,"integer");
-   settype($order,"integer");
+   settype($page,'integer');
+   settype($order,'integer');
    //Fin securite
-   require_once('modules/'.$ModPath.'/pag_fonc.php');
+   require_once 'modules/'.$ModPath.'/pag_fonc.php';
 
    /*Total pour naviguation*/
    $nb_entrees = sql_num_rows(sql_query("SELECT * FROM ".$NPDS_Prefix."agend_dem us WHERE posteur = '$cookie[1]' GROUP BY titre"));
    //Pour la naviguation
-   $total_pages = ceil($nb_entrees/$nb_news);
+   $total_pages = ceil($nb_entrees / $nb_news);
    if($page == 1)
       $page_courante = 1;
    else {
@@ -53,9 +53,9 @@ function vosajouts() {
       <h4>'.ag_translate('Liste de vos événements').'</h4>
       <hr />
       <p>'.ag_translate('Trier par').'
-         <a class="btn btn-outline-success btn-sm mr-1" href="'.$ThisFile.'&amp;order=1">'.ag_translate('En Ligne').'</a>
-         <a class="btn btn-secondary btn-sm mr-1" href="'.$ThisFile.'&amp;order=2">'.ag_translate('Hors Ligne').'</a>
-         <a class="btn btn-outline-danger btn-sm mr-1" href="'.$ThisFile.'&amp;order=3">'.ag_translate('A valider').'
+         <a class="btn btn-outline-success btn-sm me-1" href="'.$ThisFile.'&amp;order=1">'.ag_translate('En Ligne').'</a>
+         <a class="btn btn-secondary btn-sm me-1" href="'.$ThisFile.'&amp;order=2">'.ag_translate('Hors Ligne').'</a>
+         <a class="btn btn-outline-danger btn-sm me-1" href="'.$ThisFile.'&amp;order=3">'.ag_translate('A valider').'
          <a class="btn btn-secondary btn-sm" href="'.$ThisFile.'&amp;order=4">'.ag_translate('Titre').'</a>
       </p>
       <div class="table-responsive">
@@ -80,7 +80,7 @@ function vosajouts() {
                <td class="align-middle">';
       $res = sql_query("SELECT topictext FROM ".$NPDS_Prefix."agendsujet WHERE topicid = '$topicid'");
       list($topictext) = sql_fetch_row($res);
-      echo stripslashes(aff_langue($titre)).'</td>
+      echo stripslashes(aff_langue($topictext)).'</td>
                <td class="text-center align-middle small">';
       $res1 = sql_query("SELECT id, date FROM ".$NPDS_Prefix."agend WHERE liaison = '$id' ORDER BY date DESC");
       while(list($sid, $date) = sql_fetch_row($res1)) {
@@ -98,7 +98,7 @@ function vosajouts() {
                <td class="table-danger text-center align-middle">'.ag_translate('A valider').'</td>';
       echo '
                <td class="text-center  align-middle">
-                  <a class="mr-1" href="'.$ThisFile.'&amp;subop=editevt&amp;id='.$id.'"><i class="fas fa-edit fa-lg"></i></a>
+                  <a class="me-2" href="'.$ThisFile.'&amp;subop=editevt&amp;id='.$id.'"><i class="fas fa-edit fa-lg"></i></a>
                   <a href="'.$ThisFile.'&amp;subop=suppevt&amp;id='.$id.'"><i class="far fa-trash fa-lg text-danger"></i></a>
                </td>
             </tr>';
@@ -107,17 +107,15 @@ function vosajouts() {
          </tbody>
       </table>
    </div>';
-
    //Affiche pagination
-   echo ag_pag($total_pages,$page_courante,'2',''.$ThisFile.'&amp;order='.$order.'','_mod');
-   
+   echo ag_pag($total_pages, $page_courante, '2', $ThisFile.'&amp;order='.$order,'_mod');
    echo '</div>';
 }
 // SUPPRIME EVENEMENT PAR SON AUTEUR
-function suppevt($id, $ok=0) {
+function suppevt($id, $ok = 0) {
    global $NPDS_Prefix, $ModPath, $cookie, $ThisFile;
    //Debut securite
-   settype($id,"integer");
+   settype($id,'integer');
    //Fin securite
 
    if ($ok) {
@@ -263,8 +261,8 @@ function editevt($id, $month, $an, $debut) {
 function validedit ($id, $debut, $topicid, $titre, $desc, $longdesc, $lieu) {
    global $ModPath, $ModStart, $NPDS_Prefix, $ThisFile, $revalid, $menu, $courriel, $receveur;
    //Debut securite
-   settype($id,"integer");
-   settype($topicid,"integer");
+   settype($id,'integer');
+   settype($topicid,'integer');
    $titre = removeHack(addslashes($titre));
    $desc = removeHack(addslashes($desc));
    $lieu = removeHack(addslashes($lieu));
@@ -294,15 +292,15 @@ function validedit ($id, $debut, $topicid, $titre, $desc, $longdesc, $lieu) {
          /*Envoie mail si actif dans config*/
          if ($courriel == 1 || $receveur != '') {
             $sujet = ag_translate('Modification événement pour agenda');
-            $sujet=html_entity_decode($sujet, ENT_COMPAT, 'UTF-8');
+            $sujet = html_entity_decode($sujet, ENT_COMPAT, 'UTF-8');
             $message = ag_translate('Un événement modifié est à valider pour agenda').'.<br /><br />';
-            include("signat.php");
-            send_email($receveur,$sujet, $message, '', true, 'html');
+            include 'signat.php';// non
+            send_email($receveur, $sujet, $message, '', true, 'html');
          }
          if ($revalid == 3)
-            echo '<div class="alert alert-warning"><i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Un administrateur validera vos changements rapidement').'</div';
+            echo '<div class="alert alert-info"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Un administrateur validera vos changements rapidement').'</div';
          else if ($revalid == 1)
-            echo '<div class="alert alert-success"><i class="fa fa-info-circle mr-2" aria-hidden="true"></i>'.ag_translate('Vos changements ont bien été ajoutés à l\'agenda').'</div>';
+            echo '<div class="alert alert-success"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Vos changements ont bien été ajoutés à l\'agenda').'</div>';
       }
    }
 }
@@ -312,9 +310,9 @@ function validedit ($id, $debut, $topicid, $titre, $desc, $longdesc, $lieu) {
 function retire($ladate, $debut, $id, $month, $an) {
    global $ThisRedo;
    //Debut securite
-   settype($id,"integer");
-   settype($month,"integer");
-   settype($an,"integer");
+   settype($id,'integer');
+   settype($month,'integer');
+   settype($an,'integer');
    $debut = removeHack($debut);
    //Fin securite
    //On rajoute une virgule quon enleve apres sinon double virgules
@@ -329,11 +327,11 @@ include_once('modules/'.$ModPath.'/lang/agenda-'.$language.'.php');
    global $pdst, $language;
 
    //Parametres utilises par le script
-   $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart.'';
-   $ThisRedo = 'modules.php?ModPath='.$ModPath.'&ModStart=calendrier';
-   include('header.php');
-   include('modules/'.$ModPath.'/admin/config.php');
-   require_once('modules/'.$ModPath.'/ag_fonc.php');
+   $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart;
+   $ThisRedo = 'modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier';
+   include 'header.php';
+   include 'modules/'.$ModPath.'/admin/config.php';
+   require_once 'modules/'.$ModPath.'/ag_fonc.php';
    /*Verifie si bon groupe*/
    if(!autorisation($gro))
       redirect_url('index.php');

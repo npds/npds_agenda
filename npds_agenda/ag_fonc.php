@@ -149,7 +149,8 @@ function mois($nb) {
 
 // construction calendrier visualisation
 function calend($an, $month, $calblock) {
-   global $ModPath, $NPDS_Prefix, $ThisFile;
+   $ModPath = isset($ModPath) ? $ModPath : 'npds_agenda';
+   global $NPDS_Prefix, $ThisFile, $ModStart;
    $p_m = 'month'; $p_a = 'an';
    if ($calblock == 1) { 
       $ThisFile = $_SERVER['REQUEST_URI'];
@@ -222,14 +223,25 @@ function calend($an, $month, $calblock) {
    $a_prec = $an; $a_suiv = $an;
    if($month == 1) {$m_prec = 12; $a_prec = $an - 1;};
    if($month == 12) {$m_suiv = 1; $a_suiv = $an + 1;};
+   //on test debug 
 
-   $output .= '
+   if($ModStart == 'annee') {
+      $output .= '
+      <p class="text-center">'
+      .mois($month).'
+      <br />
+      '.$an.'
+      </p>';
+   } else {
+      $output .= '
    <p class="text-center">
       <a class="btn btn-outline-secondary btn-sm border-0" href="'.$ThisFile.'&amp;'.$p_m.'='.$m_prec.'&amp;'.$p_a.'='.$a_prec.'"><i class="fa fa-chevron-left align-middle"></i></a>
       <a class="btn btn-outline-secondary btn-sm border-0" href="modules.php?ModPath='.$ModPath.'&ModStart=calendrier&amp;month='.$month.'&amp;an='.$an.'">'.mois($month).'</a>
       <a class="btn btn-outline-secondary btn-sm border-0" href="'.$ThisFile.'&amp;'.$p_m.'='.$m_suiv.'&amp;'.$p_a.'='.$a_suiv.'"><i class="fa fa-chevron-right align-middle"></i></a><br />
       <a class="btn btn-outline-secondary btn-sm border-0 mt-1" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.$an.'">'.$an.'</a>
-  </p>
+  </p>';
+  }
+  $output .= '
    <table class="table table-bordered table-sm">
       <thead class="table-secondary">
          <tr >
@@ -437,21 +449,21 @@ function suj() {
          <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=agenda_add"><i class="fa fa-plus" aria-hidden="true"></i> '.ag_translate('Evénement').'</a>
       </li>';
    }
-
    $accesuj = '
-      <select class="form-select" onchange="window.location=(\''.$ThisRedo.'&subop=listsuj&sujet='.$stopicid.'\'+this.options[this.selectedIndex].value)">
-         <option>'.ag_translate('Accès catégorie(s)').'</option>';
-
+      <form class="d-flex">
+         <select class="form-select" onchange="window.location=(\''.$ThisRedo.'&subop=listsuj&sujet='.$stopicid.'\'+this.options[this.selectedIndex].value)">
+            <option>'.ag_translate('Accès catégorie(s)').'</option>';
    //Requete liste sujet
    $result = sql_query("SELECT topicid, topictext FROM ".$NPDS_Prefix."agendsujet ORDER BY topictext ASC");
    while(list($stopicid, $topictext) = sql_fetch_row($result)) {
       $topictext = stripslashes(aff_langue($topictext));
       $accesuj .= '
-         <option value="'.$stopicid.'">'.$topictext.'</option>';
+            <option value="'.$stopicid.'">'.$topictext.'</option>';
    }
    $rech = $bouton == '1' ? ag_translate('Par ville') : ag_translate('Par').' '.$bouton;
    $accesuj .= '
-      </select>';
+         </select>
+      </form>';
    $vuannu = '<li class="nav-item">
                <a class="nav-link" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=annee&amp;an='.date('Y').'">'.ag_translate('Vue annuelle').'</a>
             </li>';
@@ -465,7 +477,7 @@ function suj() {
    $Xcontent = ob_get_contents();
    ob_end_clean();
    $npds_METALANG_words = array(
-      "'!titre!'i"=>"<a class=\"btn btn-outline-primary btn-sm\" href=\"$ThisFile\"><i class=\"fa fa-home\" aria-hidden=\"true\"></i> ".ag_translate("Agenda")."</a>",
+      "'!titre!'i"=>'<a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'"><i class="fa fa-home" aria-hidden="true"></i>'.ag_translate('Agenda').'</a>',
       "'!ajeven!'i"=> $ajeven,
       "'!accesuj!'i"=> $accesuj,
       "'!vuannu!'i"=> $vuannu,

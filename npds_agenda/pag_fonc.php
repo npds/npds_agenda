@@ -17,13 +17,15 @@
 /*$adjacentes = nombre de pages à afficher de chaque côté de la page courante après 7
 $css = vide style.css sinon ajout pour css module (_mod pour le module et _admin pour la partie admin*/
 function ag_pag($total,$courante,$adjacentes,$ThisFile,$css) {
+   global $ModPath, $ModStart; 
+   $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart='.$ModStart.'&order=0';
    $prec = $courante - 1; // numero de la page precedente
    $suiv = $courante + 1; // numero de la page suivante
    $avder = $total - 1; // avant derniere page
    $pagination = '';
    if($total > 1) {
       $pagination .= '
-                  <nav>
+                  <nav class="my-2">
                      <ul class="pagination pagination-sm">';
       if ($courante == 2)
          $pagination.= '
