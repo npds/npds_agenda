@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2026 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -16,24 +16,24 @@
 
 // For More security
 if (!strstr($PHP_SELF,'admin.php')) { Access_Error(); }
-if (strstr($ModPath,"..") || strstr($ModStart,"..") || stristr($ModPath, "script") || stristr($ModPath, "cookie") || stristr($ModPath, "iframe") || stristr($ModPath, "applet") || stristr($ModPath, "object") || stristr($ModPath, "meta") || stristr($ModStart, "script") || stristr($ModStart, "cookie") || stristr($ModStart, "iframe") || stristr($ModStart, "applet") || stristr($ModStart, "object") || stristr($ModStart, "meta")) {
+if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta')) {
    die();
 }
 // For More security
 
-$f_meta_nom ='npds_agenda';
+$f_meta_nom = 'npds_agenda';
 //==> controle droit
 admindroits($aid,$f_meta_nom);
 //<== controle droit
 
 if ($admin) {
-   include_once("modules/$ModPath/admin/adm_func.php");
-   include ('modules/'.$ModPath.'/admin/pages.php');
-   include_once('modules/'.$ModPath.'/lang/agenda-'.$language.'.php');
+   include_once 'modules/'.$ModPath.'/admin/adm_func.php';
+   include 'modules/'.$ModPath.'/admin/pages.php';
+   include_once 'modules/'.$ModPath.'/lang/agenda-'.$language.'.php';
 
    /*Parametres utilises par le script*/
-   $ThisFile = 'admin.php?op=Extend-Admin-SubModule&amp;ModPath='.$ModPath.'&amp;ModStart='.$ModStart.'';
-   $ThisRedo = 'admin.php?op=Extend-Admin-SubModule&ModPath='.$ModPath.'&ModStart='.$ModStart.'';
+   $ThisFile = 'admin.php?op=Extend-Admin-SubModule&amp;ModPath='.$ModPath.'&amp;ModStart='.$ModStart;
+   $ThisRedo = 'admin.php?op=Extend-Admin-SubModule&ModPath='.$ModPath.'&ModStart='.$ModStart;
    $tipath = 'modules/'.$ModPath.'/images/categories/';
 
    $tabMois = array();
@@ -61,48 +61,48 @@ if ($admin) {
    settype($ok,'string');
 
    switch($subop) {
-   default:
-      adminagenda();
-   break;
-   case 'menuprincipal':
-      menuprincipal();
-   break;
-   case 'editevt':
-      editevt($id, $month, $an, $debut);
-   break;
-   case 'saveevt':
-      saveevt($debut, $statut, $sujet, $groupvoir, $titre, $intro, $descript, $lieu, $id);
-   break;
-   case 'retire':
-      retire($ladate, $debut, $id, $month, $an);
-   break;
-   case 'deleteevt':
-      deleteevt($id, $ok);
-   break;
-   case "topicsmanager":
-      topicsmanager();
-   break;
-   case "topicedit":
-      topicedit($topicid);
-   break;
-   case "topicmake":
-      topicmake($topicimage, $topictext);
-   break;
-   case "topicdelete":
-      topicdelete($topicid, $ok);
-   break;
-   case "topicchange":
-      topicchange($topictext, $topicimage, $topicid);
-   break;
-   case 'configuration':
-      configuration();
-   break;
-   case 'ConfigSave':
-      ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admin, $xnb_news, $xbouton, $xbouton1, $xtps);
-   break;
+      default:
+         adminagenda();
+      break;
+      case 'menuprincipal':
+         menuprincipal();
+      break;
+      case 'editevt':
+         editevt($id, $month, $an, $debut);
+      break;
+      case 'saveevt':
+         saveevt($debut, $statut, $sujet, $groupvoir, $titre, $intro, $descript, $lieu, $id);
+      break;
+      case 'retire':
+         retire($ladate, $debut, $id, $month, $an);
+      break;
+      case 'deleteevt':
+         deleteevt($id, $ok);
+      break;
+      case "topicsmanager":
+         topicsmanager();
+      break;
+      case "topicedit":
+         topicedit($topicid);
+      break;
+      case "topicmake":
+         topicmake($topicimage, $topictext);
+      break;
+      case "topicdelete":
+         topicdelete($topicid, $ok);
+      break;
+      case "topicchange":
+         topicchange($topictext, $topicimage, $topicid);
+      break;
+      case 'configuration':
+         configuration();
+      break;
+      case 'ConfigSave':
+         ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admin, $xnb_news, $xbouton, $xbouton1, $xtps);
+      break;
    }
-   }
-   echo '
+}
+echo '
    </div>';
-   include ("footer.php");
+include 'footer.php';
 ?>

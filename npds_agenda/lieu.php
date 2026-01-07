@@ -14,7 +14,7 @@
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */
 /************************************************************************/
 // For More security
-if (!stristr($_SERVER['PHP_SELF'],"modules.php")) die();
+if (!stristr($_SERVER['PHP_SELF'],'modules.php')) die();
 if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
    die();
 
@@ -54,7 +54,7 @@ function lieu($lettre, $niv) {
       $alphabet = array ('A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z',ag_translate("Autre(s)"));
       $num = count($alphabet);
       foreach($alphabet as $ltr) {
-         if ($ltr != ag_translate("Autre(s)"))
+         if ($ltr != ag_translate('Autre(s)'))
             $alph .= '<a href="'.$ThisFile.'&amp;lettre='.$ltr.'">'.$ltr.'</a> | ';
          else
             $alph .= '<a href="'.$ThisFile.'&amp;lettre=!AZ">'.$ltr.'</a>';
@@ -269,9 +269,9 @@ function lieu($lettre, $niv) {
    $Xcontent = ob_get_contents();
    ob_end_clean();
    $npds_METALANG_words = array(
-      "'!rech!'i"=>"$rech",
-      "'!alph!'i"=>"$alph",
-      "'!affeven!'i"=>"$affeven"
+      "'!rech!'i"=> $rech,
+      "'!alph!'i"=> $alph,
+      "'!affeven!'i"=> $affeven
    );
    echo meta_lang(aff_langue(preg_replace(array_keys($npds_METALANG_words),array_values($npds_METALANG_words), $Xcontent)));
    /*fin theme html partie 2/2*/

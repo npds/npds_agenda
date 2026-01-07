@@ -77,7 +77,7 @@ $blocs = array(array("Agenda"), array("include#modules/npds_agenda/bloc/agbloc.p
 
 #autodoc $txtdeb : Vous pouvez mettre ici un texte de votre choix avec du html qui s'affichera au début de l'install
 #autodoc Si rien n'est mis, le texte par défaut sera automatiquement affiché
-$txtdeb = '<h4>Installation du module Agenda v 2.0</h4><p>Ce module vous permet de disposer d\'un agenda sur votre site.</p>';
+$txtdeb = '<h4>Installation du module Agenda v 3.0</h4><p>Ce module vous permet de disposer d\'un agenda sur votre site.</p>';
 
 #autodoc $txtfin : Vous pouvez mettre ici un texte de votre choix avec du html qui s'affichera à la fin de l'install
 $txtfin = "<p>Votre installation est maintenant presque terminée</p><p>Penser également aux chmods :<br /><ul><li>Chmod 755 ou 777 aux dossiers.</li><li>Chmod 766 aux 2 fichiers :</li><ol><li>cache.timings.php</li><li>admin/config.php</li></ol><li>Chmod 666 aux fichiers se terminant par .html.</li><li>Chmod 744 aux autres fichiers.<br /></li></ul></p>";

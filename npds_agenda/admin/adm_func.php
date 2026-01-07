@@ -2,7 +2,7 @@
 /************************************************************************/
 /* DUNE by NPDS                                                         */
 /*                                                                      */
-/* NPDS Copyright (c) 2002-2024 by Philippe Brunier                     */
+/* NPDS Copyright (c) 2002-2026 by Philippe Brunier                     */
 /*                                                                      */
 /* This program is free software. You can redistribute it and/or modify */
 /* it under the terms of the GNU General Public License as published by */
@@ -51,18 +51,16 @@ function menuprincipal() {
 /// DEBUT INDEX ///
 function adminagenda() {
    global $NPDS_Prefix, $ModPath, $ThisFile, $page, $order;
-   settype($page,"integer");
-   settype($order,"integer");
-   include('modules/'.$ModPath.'/admin/config.php');
-   require_once('modules/'.$ModPath.'/ag_fonc.php');
-   require_once('modules/'.$ModPath.'/pag_fonc.php');
-
+   settype($page,'integer');
+   settype($order,'integer');
+   include 'modules/'.$ModPath.'/admin/config.php';
+   require_once 'modules/'.$ModPath.'/ag_fonc.php';
+   require_once 'modules/'.$ModPath.'/pag_fonc.php';
    menuprincipal();
-
    /*Total pour la navigation*/
    $nb_entrees = sql_num_rows(sql_query("SELECT * FROM ".$NPDS_Prefix."agend_dem"));
    /*Pour la naviguation*/
-   $total_pages = ceil($nb_entrees/$nb_admin);
+   $total_pages = ceil($nb_entrees / $nb_admin);
    if($page == 1)
       $page_courante = 1;
    else {
@@ -75,7 +73,9 @@ function adminagenda() {
    }
    $start = ($page_courante * $nb_admin - $nb_admin);
    //Ordre par defaut
-   if($order == '0'){$order1 = "valid = 3";}else if($order == '4'){$order1 = 'id';}else{$order1 = "valid = $order";}
+   if($order == '0') $order1 = 'valid = 3';
+   else if($order == '4') $order1 = 'id';
+   else $order1 = 'valid = '.$order;
 
    echo '
    <div class="">
@@ -106,18 +106,10 @@ function adminagenda() {
    while(list($id, $titre, $topicid, $posteur, $groupvoir, $valid) = sql_fetch_row($result)) {
       $titre = stripslashes(aff_langue($titre));
       switch ($valid) {
-         case 1:
-            $cla='table-success';
-         break;
-         case 2:
-            $cla='table-secondary';
-         break;
-         case 3:
-            $cla='table-danger';
-         break;
-         default:
-            $cla='';
-         break;
+         case 1 : $cla = 'table-success'; break;
+         case 2 : $cla = 'table-secondary'; break;
+         case 3 : $cla = 'table-danger'; break;
+         default : $cla = ''; break;
       }
       echo '
                <tr class="'.$cla.'">
@@ -210,7 +202,7 @@ function imgcate($topicimage) {
    /*Ouvre le repertoire*/
    $imgrep = 'modules/'.$ModPath.'/images/categories';
    $dp = opendir($imgrep);
-   $i=0;
+   $i = 0;
    while ( $file = readdir($dp) ) {
       /*Enleve les fichiers . et ..*/
       if ($file != '.' && $file != '..' && $file != 'index.html') {
@@ -234,7 +226,7 @@ function imgcate($topicimage) {
    <select class="form-select" id="topicimage" aria-label="Large select example" name="topicimage" '.$val.'>
       <option>'.ag_translate('Image de la catégorie').'</option>';
    $nb = count($ListFiles);
-   for($i = 0;$i < $nb;$i++) {
+   for($i = 0; $i < $nb; $i++) {
       echo '
       <option value=\''.$ListFiles[$i].'\'';
       if($ListFiles[$i] == $topicimage)
@@ -244,6 +236,7 @@ function imgcate($topicimage) {
    echo '
    </select>';
 }
+
 function topicmake($topicimage, $topictext) {
    global $NPDS_Prefix, $ThisFile;
    /*Debut securite*/
@@ -266,7 +259,7 @@ function topicmake($topicimage, $topictext) {
 function topicedit($topicid) {
    global $NPDS_Prefix, $tipath, $ThisFile;
    /*Debut securite*/
-   settype($topicid,"integer");
+   settype($topicid,'integer');
    /*Fin securite*/
    menuprincipal();
    /*Requete affiche sujet suivant $topicid*/
@@ -304,14 +297,11 @@ function topicedit($topicid) {
 
 function topicchange($topictext, $topicimage, $topicid) {
    global $NPDS_Prefix, $ThisFile;
-
-/*Debut securite*/
+   /*Debut securite*/
    settype($topicid,"integer");
    $topictext = removeHack(addslashes($topictext));
-/*Fin securite*/
-
+   /*Fin securite*/
    menuprincipal();
-   
    if ($topictext =='') {
    echo '<p class="lead"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Pas de catégorie').'</p>
    <div><a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicedit&topicid='.$topicid.'">'.ag_translate('Retour').'</a></div>';
@@ -323,30 +313,28 @@ function topicchange($topictext, $topicimage, $topicid) {
    <div><a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicsmanager">'.ag_translate('Retour édition catégorie').'</a></div>';
    }
 }
-function topicdelete($topicid, $ok=0)
-{
+
+function topicdelete($topicid, $ok = 0) {
    global $NPDS_Prefix, $tipath, $ThisFile;
    /*Debut securite*/
-   settype($topicid,"integer");
-   settype($ok,"integer");
+   settype($topicid,'integer');
+   settype($ok,'integer');
    /*Fin securite*/
    menuprincipal();
-   if ($ok == 1)
-   {
-   $result = "DELETE FROM ".$NPDS_Prefix."agendsujet WHERE topicid = '$topicid'";
-   $succes = sql_query($result) or die ("erreur : ".sql_error());
-   echo '<p class="lead text-danger"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('La catégorie est effacée').'</p>
-   <div><a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicsmanager">'.ag_translate('Retour édition catégorie').'</a></div>';
+   if ($ok == 1) {
+      $result = "DELETE FROM ".$NPDS_Prefix."agendsujet WHERE topicid = '$topicid'";
+      $succes = sql_query($result) or die ("erreur : ".sql_error());
+      echo '<p class="lead text-danger"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('La catégorie est effacée').'</p>
+      <div><a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicsmanager">'.ag_translate('Retour édition catégorie').'</a></div>';
    }
-   else
-   {
-   $result2 = sql_query("SELECT topicimage, topictext FROM ".$NPDS_Prefix."agendsujet WHERE topicid = '$topicid'");
-   list($topicimage, $topictext) = sql_fetch_row($result2);
-   $topictext = stripslashes($topictext);
-   echo '<p><img class="img-thumbnail" src="'.$tipath.''.$topicimage.'" /></p>
-   <p class="lead text-danger"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Supprimer la catégorie').' '.aff_langue(''.$topictext.'').' ?</p>
-   <p class="lead">'.ag_translate('Confirmez la suppression').' '.aff_langue(''.$topictext.'').'</p>
-   <div class="btn-group"><a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicsmanager">'.ag_translate('NON').'</a><a class="btn btn-outline-danger btn-sm" href="'.$ThisFile.'&amp;subop=topicdelete&amp;topicid='.$topicid.'&amp;ok=1">'.ag_translate('OUI').'</a></div>';
+   else {
+      $result2 = sql_query("SELECT topicimage, topictext FROM ".$NPDS_Prefix."agendsujet WHERE topicid = '$topicid'");
+      list($topicimage, $topictext) = sql_fetch_row($result2);
+      $topictext = stripslashes($topictext);
+      echo '<p><img class="img-thumbnail" src="'.$tipath.''.$topicimage.'" loading="lazy" /></p>
+      <p class="lead text-danger"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Supprimer la catégorie').' '.aff_langue(''.$topictext.'').' ?</p>
+      <p class="lead">'.ag_translate('Confirmez la suppression').' '.aff_langue(''.$topictext.'').'</p>
+      <div class="btn-group"><a class="btn btn-outline-primary btn-sm" href="'.$ThisFile.'&amp;subop=topicsmanager">'.ag_translate('NON').'</a><a class="btn btn-outline-danger btn-sm" href="'.$ThisFile.'&amp;subop=topicdelete&amp;topicid='.$topicid.'&amp;ok=1">'.ag_translate('OUI').'</a></div>';
    }
 }
 // FIN GESTION SUJET
@@ -355,19 +343,19 @@ function topicdelete($topicid, $ok=0)
 function editevt($id, $month, $an, $debut) {
    global $NPDS_Prefix, $ModPath, $ThisFile, $tabMois;
    /*Debut securite*/
-   settype($id,"integer");
-   settype($month,"integer");
-   settype($an,"integer");
+   settype($id,'integer');
+   settype($month,'integer');
+   settype($an,'integer');
    $debut = removeHack($debut);
    /*Fin securite*/
    menuprincipal();
-   include('modules/'.$ModPath.'/admin/config.php');
-   require_once('modules/'.$ModPath.'/ag_fonc.php');
+   include 'modules/'.$ModPath.'/admin/config.php';
+   require_once 'modules/'.$ModPath.'/ag_fonc.php';
    
    if ($debut == '') {
-      $month = date("m", time());
-      $an = date("Y", time());
-/*Requete affiche date suivant $id*/
+      $month = date('m', time());
+      $an = date('Y', time());
+      /*Requete affiche date suivant $id*/
       $result = sql_query("SELECT id, date FROM ".$NPDS_Prefix."agend WHERE liaison = '$id'");
       while(list($sid, $date) = sql_fetch_row($result)) {
          $debut .= $date.',';
@@ -375,7 +363,7 @@ function editevt($id, $month, $an, $debut) {
       $debut = substr($debut, 0, -1);
    }
 
-/*Requete affiche événement suivant $id*/
+   /*Requete affiche événement suivant $id*/
    $result = sql_query("SELECT titre, intro, descript, lieu, topicid, posteur, groupvoir, valid FROM ".$NPDS_Prefix."agend_dem WHERE id = $id");
    list($titre, $intro, $descript, $lieu, $topicid, $posteur, $groupvoir, $valid) = sql_fetch_row($result);
    $titre = stripslashes($titre);
@@ -403,7 +391,7 @@ function editevt($id, $month, $an, $debut) {
       <div class="mb-3">
          <label>'.ag_translate('Jour(s) sélectionné(s)').' :</label>
             <ul class="list-inline">';
-   $name = explode(',',$debut);
+   $name = explode(',', $debut);
    for ($i = 0; $i < sizeof($name); $i++ ) {
       echo '
                <li class="list-inline-item">'.formatfrancais($name[$i]).' <a class="text-danger mx-2" data-bs-toggle="tooltip" data-bs-placement="bottom" data-bs-custom-class="tooltipdanger" title="'.ag_translate("Supprimer").'" href="'.$ThisFile.'&amp;subop=retire&amp;ladate='.$name[$i].'&amp;debut='.$debut.'&amp;id='.$id.'&amp;month='.$month.'&amp;an='.$an.'"><i class="fa fa-times" aria-hidden="true"></i></a></li>';
@@ -441,12 +429,12 @@ function editevt($id, $month, $an, $debut) {
       <div class="mb-3">
          <label for="intro">'.ag_translate('Résumé de l\'événement').'</label>
          <textarea class="form-control tin" rows="4" id="intro" name="intro">'.$intro.'</textarea>
-         '.aff_editeur("intro","").'
+         '.aff_editeur('intro','').'
       </div>
       <div class="mb-3">
          <label for="">'.ag_translate('Description').'</label>
          <textarea class="form-control tin" name="descript" rows="20">'.$descript.'</textarea>';
-         echo aff_editeur("descript","false");
+         echo aff_editeur('descript','false');
    echo '
       </div>
    <div class="mb-3">
@@ -454,7 +442,7 @@ function editevt($id, $month, $an, $debut) {
    if ($bouton == '1')
       echo '<input class="form-control" maxLength=50 name="lieu" size=50 value="'.$lieu.'" />';
    else {
-      include('modules/'.$ModPath.'/recherche/'.$bouton.'.php');
+      include 'modules/'.$ModPath.'/recherche/'.$bouton.'.php';
       echo '
       <select class="form-select" name="lieu">
          <option></option>';
@@ -479,18 +467,18 @@ function editevt($id, $month, $an, $debut) {
 function calo($id, $month, $an, $debut) {
    global $ModPath, $NPDS_Prefix, $ThisFile;
    /*Debut securite*/
-   settype($id,"integer");
-   settype($month,"integer");
-   settype($an,"integer");
+   settype($id,'integer');
+   settype($month,'integer');
+   settype($an,'integer');
    $debut = removeHack($debut);
    /*Fin securite*/
    /*Recuperation du jour, mois, et annee actuel*/
-   $jour_actuel = date("j", time());
-   $mois_actuel = date("m", time());
-   $an_actuel = date("Y", time());
+   $jour_actuel = date('j', time());
+   $mois_actuel = date('m', time());
+   $an_actuel = date('Y', time());
    $jour = $jour_actuel;
    /*Si la variable mois nexiste pas, mois et annee correspondent au mois et a lannee courante*/
-   if(!isset($_GET["month"])) {
+   if(!isset($_GET['month'])) {
       $month = $mois_actuel;
       $an = $an_actuel;
    }
@@ -510,18 +498,19 @@ function calo($id, $month, $an, $debut) {
    }
    /*Affichage du mois et annee*/
    $mois_de_annee = array(
-      ag_translate("Janvier"),
-      ag_translate("Février"),
-      ag_translate("Mars"),
-      ag_translate("Avril"),
-      ag_translate("Mai"),
-      ag_translate("Juin"),
-      ag_translate("Juillet"),
-      ag_translate("Ao&ucirc;t"),
-      ag_translate("Septembre"),
-      ag_translate("Octobre"),
-      ag_translate("Novembre"),
-      ag_translate("Décembre"));
+      ag_translate('Janvier'),
+      ag_translate('Février'),
+      ag_translate('Mars'),
+      ag_translate('Avril'),
+      ag_translate('Mai'),
+      ag_translate('Juin'),
+      ag_translate('Juillet'),
+      ag_translate('Ao&ucirc;t'),
+      ag_translate('Septembre'),
+      ag_translate('Octobre'),
+      ag_translate('Novembre'),
+      ag_translate('Décembre')
+   );
    $mois_en_clair = $mois_de_annee[$month - 1];
    /*Creation tableau a 31 entree sans reservation*/
    for($j = 1; $j < 32; $j++) {
@@ -555,7 +544,7 @@ function calo($id, $month, $an, $debut) {
       $dernier_jour++;
    }
    /*Ajoute un 0 pour mois*/
-   if($month <= 9 && substr($month, 0, 1)!= 0)
+   if($month <= 9 && substr($month, 0, 1) != 0)
       $month  = '0'.$month;
    $sdate = "01/$month/$an";
    $sEngDate = substr ($sdate, -4).substr ($sdate, 3, 2).substr ($sdate, 0, 2);
@@ -661,16 +650,15 @@ function calo($id, $month, $an, $debut) {
          </tr>
       </table>';
 }
-// FIN AFFICHAGE CALENDRIER
 
 /// DEBUT SAUVER EDITER ///
 function saveevt($debut, $statut, $sujet, $groupvoir, $titre, $intro, $descript, $lieu, $id) {
    global $ModPath, $NPDS_Prefix, $ThisFile;
    /*Debut securite*/
-   settype($statut,"integer");
-   settype($sujet,"integer");
-   settype($groupvoir,"integer");
-   settype($id,"integer");
+   settype($statut,'integer');
+   settype($sujet,'integer');
+   settype($groupvoir,'integer');
+   settype($id,'integer');
    $titre = removeHack(addslashes($titre));
    $intro = removeHack(addslashes($intro));
    $lieu = removeHack(addslashes($lieu));
@@ -696,31 +684,29 @@ function saveevt($debut, $statut, $sujet, $groupvoir, $titre, $intro, $descript,
       return;
    }
 }
-// FIN SAUVER EDITER
 
 // DEBUT ENLEVER JOUR
 function retire($ladate, $debut, $id, $month, $an) {
    global $ThisRedo;
    /*Debut securité*/
-   settype($id,"integer");
-   settype($month,"integer");
-   settype($an,"integer");
+   settype($id,'integer');
+   settype($month,'integer');
+   settype($an,'integer');
    $debut = removeHack($debut);
    /*Fin securité*/
    /*On rajoute une virgule qu'on enlève après sinon double virgules*/
    $debut1 = ''.$debut.',';
-   $newdebut = str_replace("$ladate,", "", "$debut1");
+   $newdebut = str_replace("$ladate,", '', $debut1);
    $newdebut = substr("$newdebut", 0, -1);
    redirect_url(''.$ThisRedo.'&subop=editevt&id='.$id.'&month='.$month.'&an='.$an.'&debut='.$newdebut.'');
 }
-// FIN ENLEVER JOUR
 
 // DEBUT SUPPRIMER
-function deleteevt($id, $ok=0) {
+function deleteevt($id, $ok = 0) {
    global $NPDS_Prefix, $ThisFile;
    /*Debut securite*/
-   settype($liaison,"integer");
-   settype($ok,"integer");
+   settype($liaison,'integer');
+   settype($ok,'integer');
    /*Fin securite*/
    menuprincipal();
    if ($ok) {
@@ -740,16 +726,14 @@ function deleteevt($id, $ok=0) {
       echo '<p><a class="btn btn-secondary btn-sm mt-2" href="'.$ThisFile.'">'.ag_translate('Retour').'</a></p>';
    }
 }
-// FIN SUPPRIMER
 
 // DEBUT CONFIGURATION
 function configuration() {
    global $ModPath, $ThisFile;
    settype($list_tri,'string');
    menuprincipal();
-   include('modules/'.$ModPath.'/admin/config.php');
-   include('modules/'.$ModPath.'/cache.timings.php');
-
+   include 'modules/'.$ModPath.'/admin/config.php';
+   include 'modules/'.$ModPath.'/cache.timings.php';
    //Ouvre le repertoire
    $imgrep = 'modules/'.$ModPath.'/recherche';
    $dp = opendir($imgrep);
@@ -769,7 +753,7 @@ function configuration() {
       if ($list_tri == 'DESC') rsort($ListFiles);
       else sort($ListFiles);
    }
-   $def1='';
+   $def1 = '';
    if ($bouton == '1') {
       $def = '
          <div class="form-check">
@@ -804,7 +788,7 @@ function configuration() {
       $def1 .= '
       <select class="form-select" name="xbouton1">';
       $nb = count($ListFiles);
-      for($i = 0;$i < $nb;$i++) {
+      for($i = 0; $i < $nb; $i++) {
          $name = substr($ListFiles[$i], 0, -4);
          $sel = $bouton == $name ? ' selected="selected"' : '' ;
          $def1 .= '
@@ -914,14 +898,14 @@ function configuration() {
 function ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admin, $xnb_news, $xbouton, $xbouton1, $xtps) {
    global $ModPath;
    /*Debut securite*/
-   settype($xgro,"integer");
-   settype($xvalid,"integer");
-   settype($xcourriel,"integer");
-   settype($xrevalid,"integer");
-   settype($xnb_admin,"integer");
-   settype($xnb_news,"integer");
-   settype($xbouton,"integer");
-   settype($xtps,"integer");
+   settype($xgro,'integer');
+   settype($xvalid,'integer');
+   settype($xcourriel,'integer');
+   settype($xrevalid,'integer');
+   settype($xnb_admin,'integer');
+   settype($xnb_news,'integer');
+   settype($xbouton,'integer');
+   settype($xtps,'integer');
    $xreceveur = removeHack($xreceveur);
    $xbouton = removeHack($xbouton);
    /*Fin securite*/
@@ -987,5 +971,4 @@ function ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admi
    }   
    echo '<div class="alert alert-success"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Les préférences pour l\'agenda ont été enregistrées').'</div>';
 }
-// FIN SAUVER CONFIGURATION
 ?>
