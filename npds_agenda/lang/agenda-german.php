@@ -8,7 +8,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 2 of the License.       */
 /*                                                                      */
-/* Module npds_agenda 3.0                                               */
+/* Module npds_agenda 3.1                                               */
 /*                                                                      */
 /* Auteur Oim                                                           */
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */

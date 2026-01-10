@@ -8,7 +8,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 3 of the License.       */
 /*                                                                      */
-/* Module npds_agenda 3.0                                               */
+/* Module npds_agenda 3.1                                               */
 /*                                                                      */
 /* Auteur Oim                                                           */
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */
@@ -22,18 +22,16 @@ settype($niv,'integer');
 settype($sup,'integer');//à voir cohérence
 settype($inf,'integer');//à voir cohérence
 
-// DEBUT LISTE EVENEMENT
+// affiche la liste des evenements d'une catégorie
 function listsuj($sujet, $niv) {
    global $NPDS_Prefix, $ModPath, $theme, $cookie,  $nb_news, $tipath, $page;
    $ThisFile = 'modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier';
-
    /*Debut securite*/
    settype($sujet,'integer');
    settype($niv,'integer');
    settype($page,'integer');
    settype($cs1,'string');
    settype($cs,'string');
-
    settype($sup,'integer');
    settype($inf,'integer');
    settype($datepourmonmodal,'string');
@@ -44,10 +42,9 @@ function listsuj($sujet, $niv) {
    $inclusion = 'modules/'.$ModPath.'/html/listsuj.html';
    //fin theme html partie 1/2
 
-/*Gestion naviguation en cours ou passe*/
+   /*Gestion naviguation en cours ou passe*/
    $now = date('Y-m-d');
-
-/*Total pour pagination*/
+   /*Total pour pagination*/
    $req1 = sql_query("SELECT
          ut.groupvoir
       FROM
@@ -109,18 +106,22 @@ function listsuj($sujet, $niv) {
    $res = sql_query("SELECT topicimage, topictext FROM ".$NPDS_Prefix."agendsujet WHERE topicid = '$sujet'");
    list($topicimage, $topictext) = sql_fetch_row($res);
    $topictext = stripslashes(aff_langue($topictext));
-   
-   $affres ='
+   $affres = '
    <div class="card">
       <div class="card-body">
-         <h4 class="mb-3">'.ag_translate('Liste des événements').' '.ag_translate('pour').' '.$topictext.'</h4>';
+         <h4 class="mb-3"><img class="me-2" width="64" height="64" src="'.$tipath.''.$topicimage.'" alt="logo_'.$topictext.'" loading="lazy" />'.ag_translate('Liste des événements').' '.ag_translate('pour').' '.$topictext.'</h4>';
    if ($sup == '0' && $inf == '0')
       $affres .= '<div class="alert alert-danger"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Vide').'</div>';
    else {
       $affres .= '
-      <div class="list-group">
-         <a class="list-group-item list-group-item-action" href="'.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv=0">'.ag_translate('Evénement(s) à venir').' <span class="badge bg-success float-end" data-toggle="tooltip" data-placement="bottom" title="Visualiser">'.$sup.'</span></a>
-         <a class="list-group-item list-group-item-action" href="'.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv=1">'.ag_translate('Evénement(s) en cours ou passé(s)').' <span class="badge bg-secondary float-end" data-toggle="tooltip" data-placement="bottom" title="Visualiser">'.$inf.'</span></a>
+      <div class="list-group">';
+      $affres .= $sup != 0 ? 
+         '<a class="list-group-item list-group-item-action" href="'.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv=0">'.ag_translate('Evénement(s) à venir').' <span class="badge bg-success float-end" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualiser">'.$sup.'</span></a>' :
+         '<a class="list-group-item">'.ag_translate('Evénement(s) à venir').' <span class="badge bg-success float-end">'.$sup.'</span></a>' ;
+      $affres .= $inf != 0 ? 
+         '<a class="list-group-item list-group-item-action" href="'.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv=1">'.ag_translate('Evénement(s) en cours ou passé(s)').' <span class="badge bg-secondary float-end" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Visualiser">'.$inf.'</span></a>' :
+         '<a class="list-group-item">'.ag_translate('Evénement(s) en cours ou passé(s)').' <span class="badge bg-secondary float-end">'.$inf.'</span></a>' ;
+      $affres .= '
       </div>';
 
       //Requete liste evenement suivant $sujet
@@ -175,14 +176,16 @@ function listsuj($sujet, $niv) {
             }
             $affres .= '
                <div class="row">
-                  <div class="col-md-2">'.ag_translate('Résumé').'</div>
+                  <div class="col-md-2 fw-semibold">'.ag_translate('Résumé').'</div>
                   <div class="col-md-10">'.$intro.'</div>
-                  <div class="col-md-2">'.ag_translate('Lieu').'</div>
+                  <div class="col-md-2 fw-semibold">'.ag_translate('Lieu').'</div>
                   <div class="col-md-10">'.$lieu.'</div>
                </div>
+               <hr />
+               <button type="button" class="btn btn-primary btn-sm my-2" data-bs-toggle="modal" data-bs-target="#ev'.$id.'">'.ag_translate('Voir la fiche').'</button>
+
                <div class="row">
                   <div class="col-md-12">
-                     <button type="button" class="btn btn-secondary btn-sm my-2" data-bs-toggle="modal" data-bs-target="#ev'.$id.'">'.ag_translate('Voir la fiche').'</button>
                      <div class="modal fade" id="ev'.$id.'" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                            <div class="modal-content">
@@ -195,15 +198,15 @@ function listsuj($sujet, $niv) {
             $affres .= $tot > 1 ? $datepourmonmodal : $newdate ;
             $affres .= '</strong></h5>
                                  <div class="row">
-                                    <div class="col-md-2">'.ag_translate('Résumé').'</div>
+                                    <div class="col-md-2 fw-semibold">'.ag_translate('Résumé').'</div>
                                     <div class="col-md-10">'.$intro.'</div>
                                  </div>
                                  <div class="row">
-                                    <div class="col-md-2">'.ag_translate('Description').'</div>
+                                    <div class="col-md-2 fw-semibold">'.ag_translate('Description').'</div>
                                     <div class="col-md-10">'.$descript.'</div>
                                  </div>
                                  <div class="row">
-                                    <div class="col-md-2">'.ag_translate('Lieu').'</div>
+                                    <div class="col-md-2 fw-semibold">'.ag_translate('Lieu').'</div>
                                     <div class="col-md-10">'.$lieu.'</div>
                                  </div>
                               </div>
@@ -217,10 +220,10 @@ function listsuj($sujet, $niv) {
             $quipost = isset($cookie[1]) ? 'yes' : 'no';
             if ($quipost == 'yes' and $cookie[1] == $posteur)
                $affres .= '
-                  <a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
+                  <a class="btn btn-outline-primary btn-sm me-2" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
                   <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
             else
-               $affres .= ag_translate('Posté par').' '.$posteur;
+               $affres .= '<div>'.ag_translate('Posté par').' '.$posteur.' '.userpopover($posteur,36,'0').'</div>';
             $affres .= '
                </p>
             </div>
@@ -228,8 +231,8 @@ function listsuj($sujet, $niv) {
          }
       }
       /*Affiche pagination*/
-      echo ag_pag($total_pages,$page_courante,'2',''.$ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv='.$niv.'','_mod');
-         $affres.='
+      echo ag_pag($total_pages,$page_courante, '2', $ThisFile.'&amp;subop=listsuj&amp;sujet='.$sujet.'&amp;niv='.$niv, '_mod');
+      $affres .= '
          </div>
       </div>';
    }
@@ -245,12 +248,11 @@ function listsuj($sujet, $niv) {
 
 }
 
-/// DEBUT FONCTION JOUR ///
 function jour($date) {
    global $ModPath, $NPDS_Prefix, $theme, $cookie, $ThisFile, $nb_news, $tipath, $page;
    $affeven = ''; $datepourmonmodal = '';
    //Debut securite
-   settype($page,"integer");
+   settype($page,'integer');
    $date = removeHack($date);
    //Fin securite
    require_once 'modules/'.$ModPath.'/pag_fonc.php';
@@ -272,11 +274,9 @@ function jour($date) {
       if(autorisation($groupvoir)) $nb_entrees++;
    }
 
-//Pour la naviguation
-
+   //Pour la naviguation
    $total_pages = ceil($nb_entrees/$nb_news);
-   if($page == 1)
-      $page_courante = 1;
+   if($page == 1) $page_courante = 1;
    else {
       if ($page < 1)
          $page_courante = 1;
@@ -288,7 +288,7 @@ function jour($date) {
    $start = ($page_courante * $nb_news - $nb_news);
    $retour = convertion($date);
    $datetime = formatfrancais($date);
-   $bandeau = '<a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier&amp;month='.$retour[0].'&amp;an='.$retour[1].'">'.ag_translate('Retour au calendrier').'</a>';
+   $bandeau = '<a class="btn btn-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=calendrier&amp;month='.$retour[0].'&amp;an='.$retour[1].'">'.ag_translate('Retour au calendrier').'</a>';
    $lejour = $datetime;
    if ($nb_entrees == 0)
       $affeven = '<p><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Rien de prévu ce jour').'</p>';
@@ -315,8 +315,7 @@ function jour($date) {
          $topictext = stripslashes(aff_langue($topictext));
          $affeven .= '
          <div class="card my-3">
-            <div class="card-body">
-               <p class="card-text">';
+            <div class="card-body">';
          /*Si membre appartient au bon groupe*/
          if(autorisation($groupvoir)) {
             /*Si evenement plusieurs jours*/
@@ -325,15 +324,18 @@ function jour($date) {
             $quipost = isset($cookie[1]) ? 'yes' : 'no';
             $affeven .= '
                   <div class="d-flex justify-content-between mb-3">
-                     <img class="img-thumbnail col-2" src="'.$tipath.''.$topicimage.'" loading="lazy" />';
+                     <img class="img-thumbnail col-2" src="'.$tipath.''.$topicimage.'" width="64" height="64" loading="lazy" data-bs-toggle="tooltip" title="'.stripslashes(aff_langue($topictext)).'" />';
             $affeven .= ($quipost == 'yes' and $cookie[1] == $posteur) ?
-                     '<div><a class="btn btn-outline-primary btn-sm me-2" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
-                     <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a></div>' :
-                     '<p>'.ag_translate('Posté par').'&nbsp;'.$posteur.'</p>' ;
+                     '<div class="text-end align-self-center">
+                        <a class="btn btn-outline-primary btn-sm me-2" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$liaison.'"><i class="far fa-edit" aria-hidden="true"></i></a>
+                        <a class="btn btn-outline-danger btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;id='.$liaison.'"><i class="fa fa-trash" aria-hidden="true"></i></a><br />
+                        <div class="mt-4">'.ag_translate('Posté par').'&nbsp;'.$posteur.' '.userpopover($posteur,40,'').'</div>
+                     </div>
+                  </div>' :
+                     '<div>'.ag_translate('Posté par').'&nbsp;'.$posteur.' '.userpopover($posteur,40,'').'</div></div>' ;
             $affeven .= '
-                  </div>
+                  <hr />
                   <h4 class="card-title">'.$titre.'</h4>';
-          
             $affeven .= '<p class="card-text">';
             if ($tot > 1) {
                $affeven .= '<i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Cet événement dure plusieurs jours').'</p>';
@@ -357,14 +359,15 @@ function jour($date) {
             }
             $affeven .= '
             <div class="row">
-               <div class="col-md-2">'.ag_translate('Résumé').'</div>
+               <div class="col-md-2 fw-semibold">'.ag_translate('Résumé').'</div>
                <div class="col-md-10">'.$intro.'</div>
-               <div class="col-md-2">'.ag_translate('Lieu').'</div>
+               <div class="col-md-2 fw-semibold">'.ag_translate('Lieu').'</div>
                <div class="col-md-10">'.$lieu.'</div>
             </div>
+            <hr />
             <div class="row">
                <div class="col-md-12">
-                  <button type="button" class="btn btn-outline-primary btn-sm my-2" data-bs-toggle="modal" data-bs-target="#ev'.$id.'">
+                  <button type="button" class="btn btn-primary btn-sm my-2" data-bs-toggle="modal" data-bs-target="#ev'.$id.'">
                   '.ag_translate('Voir la fiche').'
                   </button>
                   <div class="modal fade" id="ev'.$id.'" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true">
@@ -379,11 +382,11 @@ function jour($date) {
             $affeven .= $tot > 1 ? $datepourmonmodal : $newdate;
             $affeven .= '</strong></h5>
                               <div class="row">
-                                 <div class="col-md-2">'.ag_translate('Résumé').'</div>
+                                 <div class="col-md-2 fw-semibold">'.ag_translate('Résumé').'</div>
                                  <div class="col-md-10">'.$intro.'</div>
-                                 <div class="col-md-2">'.ag_translate('Description').'</div>
+                                 <div class="col-md-2 fw-semibold">'.ag_translate('Description').'</div>
                                  <div class="col-md-10">'.$descript.'</div>
-                                 <div class="col-md-2">'.ag_translate('Lieu').'</div>
+                                 <div class="col-md-2 fw-semibold">'.ag_translate('Lieu').'</div>
                                  <div class="col-md-10">'.$lieu.'</div>
                               </div>
                            </div>
@@ -419,11 +422,8 @@ function fiche($date, $id) {
    settype($id,'integer');
    $date = removeHack($date);
    //Fin securite
-
    //debut theme html partie 1/2
-   //   $inclusion = false;
    $inclusion = 'modules/'.$ModPath.'/html/fiche.html';
-
    //fin theme html partie 1/2
 
    /*Gestion naviguation en cours ou passe*/
@@ -447,7 +447,7 @@ function fiche($date, $id) {
          $result1 = sql_query("SELECT date FROM ".$NPDS_Prefix."agend WHERE liaison = '$id' ORDER BY date DESC");
          $tot = sql_num_rows($result1);
          if ($posteur == $cookie[1]) {
-            $postepar = '<a class="btn btn-outline-primary btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$id.'"><i class="far fa-edit" aria-hidden="true"></i></a>&nbsp;&nbsp;
+            $postepar = '<a class="btn btn-outline-primary btn-sm me-2" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=editevt&amp;id='.$id.'"><i class="far fa-edit" aria-hidden="true"></i></a>
             <a class="btn btn-danger-outline btn-sm" href="modules.php?ModPath='.$ModPath.'&amp;ModStart=administration&amp;subop=suppevt&amp;date='.$date.'&amp;id='.$id.'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
          }
          else
@@ -531,9 +531,7 @@ if (($cache_obj->genereting_output == 1) or ($cache_obj->genereting_output == -1
    switch($subop) {
       default:
          echo suj();
-         $an = date('Y', time());
-         $month = date('m', time());
-         echo calend($an, $month, 0);
+         echo calend(date('Y', time()), date('m', time()), 0);
       break;
       case 'listsuj':
          echo suj();

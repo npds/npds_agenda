@@ -8,7 +8,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 3 of the License.       */
 /*                                                                      */
-/* Module npds_agenda 3.0                                               */
+/* Module npds_agenda 3.1                                               */
 /*                                                                      */
 /* Auteur Oim                                                           */
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */
@@ -924,7 +924,7 @@ function ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admi
    $content .= "/* it under the terms of the GNU General Public License as published by */\n";
    $content .= "/* the Free Software Foundation; either version 2 of the License.       */\n";
    $content .= "/*                                                                      */\n";
-   $content .= "/* Module npds_agenda 3.0                                               */\n";
+   $content .= "/* Module npds_agenda 3.1                                               */\n";
    $content .= "/*                                                                      */\n";
    $content .= "/* Auteur Oim                                                           */\n";
    $content .= "/* Changement de nom du module version Rev16 par jpb/phr janv 2017      */\n";
@@ -954,7 +954,7 @@ function ConfigSave($xgro, $xvalid, $xcourriel, $xreceveur, $xrevalid, $xnb_admi
       $content .= "/* it under the terms of the GNU General Public License as published by */\n";
       $content .= "/* the Free Software Foundation; either version 2 of the License.       */\n";
       $content .= "/*                                                                      */\n";
-      $content .= "/* Module npds_agenda 3.0                                               */\n";
+      $content .= "/* Module npds_agenda 3.1                                               */\n";
       $content .= "/*                                                                      */\n";
       $content .= "/* Auteur Oim                                                           */\n";
       $content .= "/* Changement de nom du module version Rev16 par jpb/phr janv 2017      */\n";

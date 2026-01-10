@@ -8,7 +8,7 @@
 /* it under the terms of the GNU General Public License as published by */
 /* the Free Software Foundation; either version 3 of the License.       */
 /*                                                                      */
-/* Module npds_agenda 3.0                                               */
+/* Module npds_agenda 3.1                                               */
 /*                                                                      */
 /* Auteur Oim                                                           */
 /* Changement de nom du module version Rev16 par jpb/phr janv 2017      */
@@ -19,8 +19,6 @@ if (!stristr($_SERVER['PHP_SELF'],"modules.php")) die();
 if (strstr($ModPath,'..') || strstr($ModStart,'..') || stristr($ModPath, 'script') || stristr($ModPath, 'cookie') || stristr($ModPath, 'iframe') || stristr($ModPath, 'applet') || stristr($ModPath, 'object') || stristr($ModPath, 'meta') || stristr($ModStart, 'script') || stristr($ModStart, 'cookie') || stristr($ModStart, 'iframe') || stristr($ModStart, 'applet') || stristr($ModStart, 'object') || stristr($ModStart, 'meta'))
    die();
 // For More security
-
-/// DEBUT FONCTION
 
 /// DEBUT AJOUT ///
 function ajout($month, $an, $debut) {
@@ -138,10 +136,10 @@ function catcreer ($debut, $topicid, $groupvoir, $titre, $desc, $longdesc, $lieu
    /*Fin securite*/
 
    echo $menu;
-   if ($debut == '' || $topicid == '' || $titre == '' || $desc == '' || $longdesc == '' || $lieu == '') {
-      echo '<p class="lead text-danger"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Vous n\'avez pas rempli les champs obligatoires').'</p>
+   if ($debut == '' || $topicid == '' || $titre == '' || $desc == '' || $longdesc == '' || $lieu == '')
+      echo '
+      <p class="lead text-danger"><i class="fa fa-info-circle me-2" aria-hidden="true"></i>'.ag_translate('Vous n\'avez pas rempli les champs obligatoires').'</p>
       <div class="float-end"><a class="btn btn-secondary btn-sm" href="javascript:history.back()">'.ag_translate('Retour').'</a></div>';
-   }
    else {
       /*Enregistrement demande*/
       $result = sql_query("INSERT INTO ".$NPDS_Prefix."agend_dem SET id = '', titre = '$titre', intro = '$desc', descript = '$longdesc', lieu = '$lieu', topicid = '$topicid', posteur = '$member', groupvoir = '$groupvoir', valid = '$valid'");
@@ -189,9 +187,6 @@ function retire($ladate, $debut, $month, $an) {
    $newdebut = substr("$newdebut", 0, -1);
    redirect_url(''.$ThisRedo.'&subop=editevt&month='.$month.'&an='.$an.'&debut='.$newdebut.'');
 }
-// FIN RETIRE DATE
-
-/// FIN FONCTION
 
 //Affichage de la page
 
@@ -202,32 +197,32 @@ include_once 'modules/'.$ModPath.'/ag_fonc.php';
 include 'header.php';
 
 /*Paramètres utilisés par le script*/
-   $ThisFile = 'modules.php?ModPath='.$ModPath.'&ModStart='.$ModStart;
-   $ThisRedo = 'modules.php?ModPath='.$ModPath.'&ModStart='.$ModStart;
+$ThisFile = 'modules.php?ModPath='.$ModPath.'&ModStart='.$ModStart;
+$ThisRedo = 'modules.php?ModPath='.$ModPath.'&ModStart='.$ModStart;
 
-   settype($subop,'string');
-   settype($month,'integer');
-   settype($an,'integer');
-   settype($debut,'string');
-   settype($statut,'string');
-   settype($titre,'string');
+settype($subop,'string');
+settype($month,'integer');
+settype($an,'integer');
+settype($debut,'string');
+settype($statut,'string');
+settype($titre,'string');
 
-   //Si membre appartient au bon groupe
-   if(autorisation($gro)) {
-      switch($subop) {
-         default:
-            echo suj();
-            ajout($month, $an, $debut);
-         break;
-         case 'catcreer':
-            catcreer ($debut, $topicid, $groupvoir, $titre, $desc, $longdesc, $lieu, $statut, $member);
-         break;
-         case 'retire':
-            retire($ladate, $debut, $month, $an);
-         break;
-      }
+//Si membre appartient au bon groupe
+if(autorisation($gro)) {
+   switch($subop) {
+      default:
+         echo suj();
+         ajout($month, $an, $debut);
+      break;
+      case 'catcreer':
+         catcreer ($debut, $topicid, $groupvoir, $titre, $desc, $longdesc, $lieu, $statut, $member);
+      break;
+      case 'retire':
+         retire($ladate, $debut, $month, $an);
+      break;
    }
-   else
-      redirect_url('index.php');
-   include 'footer.php';
+}
+else
+   redirect_url('index.php');
+include 'footer.php';
 ?>
