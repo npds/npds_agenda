@@ -46,7 +46,7 @@ function listsuj($sujet, $niv) {
    $now = date('Y-m-d');
    /*Total pour pagination*/
    $req1 = sql_query("SELECT
-         ut.groupvoir
+         ut.groupvoir, us.liaison
       FROM
          ".$NPDS_Prefix."agend_dem ut,
          ".$NPDS_Prefix."agend us 
@@ -62,7 +62,7 @@ function listsuj($sujet, $niv) {
 
 /*Total pour pagination*/
    $req1 = sql_query("SELECT
-         ut.groupvoir
+         ut.groupvoir, us.liaison
       FROM
          ".$NPDS_Prefix."agend_dem ut,
          ".$NPDS_Prefix."agend us

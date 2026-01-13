@@ -84,7 +84,7 @@ function lieu($lettre, $niv) {
    /*Total pour naviguation*/
    settype($sup,'integer');
    $req1 = sql_query("SELECT 
-         ut.groupvoir 
+         ut.groupvoir, us.liaison 
       FROM 
          ".$NPDS_Prefix."agend us, 
          ".$NPDS_Prefix."agend_dem ut 
@@ -100,7 +100,7 @@ function lieu($lettre, $niv) {
    /*Total pour naviguation*/
    settype($inf,'integer');
    $req1 = sql_query("SELECT 
-         ut.groupvoir 
+         ut.groupvoir, us.liaison 
       FROM 
          ".$NPDS_Prefix."agend us, 
          ".$NPDS_Prefix."agend_dem ut 
